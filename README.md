@@ -1,1 +1,275 @@
-# Cap-Sp-
+<div align="center">
+
+<img src="https://cdn-icons-png.flaticon.com/512/16533/16533390.png" width="120" alt="Cap Spé Logo"/>
+
+# 🎓 Cap Spé
+
+### *L'orientation réinventée pour les élèves de seconde*
+
+<br/>
+
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![Flask](https://img.shields.io/badge/Flask-3.x-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com)
+[![Mistral AI](https://img.shields.io/badge/Mistral_AI-Agent-FF7000?style=for-the-badge&logo=mistral&logoColor=white)](https://mistral.ai)
+[![Pandas](https://img.shields.io/badge/Pandas-2.x-150458?style=for-the-badge&logo=pandas&logoColor=white)](https://pandas.pydata.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.x-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg?style=for-the-badge)](LICENSE.txt)
+
+<br/>
+
+> 💡 **Cap Spé** est une application web qui aide les élèves de seconde à choisir leurs spécialités de première grâce à un chatbot IA, un simulateur Parcoursup et des ressources pédagogiques.
+
+<br/>
+
+---
+
+</div>
+
+## 📋 Table des matières
+
+- [✨ Fonctionnalités](#-fonctionnalités)
+- [🛠️ Stack technique](#️-stack-technique)
+- [🚀 Installation et lancement](#-installation-et-lancement)
+- [📁 Structure du projet](#-structure-du-projet)
+- [🤖 Le chatbot IA](#-le-chatbot-ia)
+- [📊 Le simulateur Parcoursup](#-le-simulateur-parcoursup)
+- [🧪 Lancer les tests](#-lancer-les-tests)
+- [👥 Équipe](#-équipe)
+
+---
+
+## ✨ Fonctionnalités
+
+<div align="center">
+
+| 🤖 Chatbot IA | 📚 Spécialités | 📊 Simulateur | 💬 Conseils |
+|:---:|:---:|:---:|:---:|
+| Agent Mistral spécialisé en orientation scolaire | Présentation claire de toutes les spécialités de première | Simulateur Parcoursup basé sur les données officielles | Témoignages et conseils d'élèves |
+| Répond à toutes vos questions sur les parcours | Programmes, débouchés, combinaisons recommandées | Probabilités d'admission par filière, région, mention | Retours d'expérience concrets |
+
+</div>
+
+---
+
+## 🛠️ Stack technique
+
+```
+Cap Spé
+├── 🐍  Back-end    →  Python 3 + Flask
+├── 🤖  IA          →  API Mistral AI (mistral-small-latest)
+├── 📊  Données     →  Pandas + CSV Parcoursup officiel (data.gouv.fr)
+├── 🎨  Front-end   →  HTML5 + Tailwind CSS + JavaScript
+└── 🔐  Config      →  python-dotenv (.env)
+```
+
+---
+
+## 🚀 Installation et lancement
+
+### Prérequis
+
+- **Python 3.10 ou supérieur** — [Télécharger Python](https://www.python.org/downloads/)
+- **Git** — [Télécharger Git](https://git-scm.com/)
+- Une **clé API Mistral AI** — [Obtenir une clé](https://console.mistral.ai/)
+
+---
+
+### Étape 1 — Cloner le dépôt
+
+```bash
+git clone https://forge.apps.education.fr/[votre-repo]/cap-spe.git
+cd cap-spe
+```
+
+### Étape 2 — Créer un environnement virtuel
+
+```bash
+# Créer l'environnement
+python -m venv venv
+
+# Activer l'environnement
+# Sur Windows :
+venv\Scripts\activate
+# Sur macOS / Linux :
+source venv/bin/activate
+```
+
+### Étape 3 — Installer les dépendances
+
+```bash
+pip install -r requirements.txt
+```
+
+### Étape 4 — Configurer les variables d'environnement
+
+Créez un fichier `.env` à la racine du projet :
+
+```bash
+# Créer le fichier .env
+touch .env    # macOS / Linux
+# ou sur Windows : créez le fichier manuellement
+```
+
+Ajoutez votre clé API dans ce fichier `.env` :
+
+```env
+MISTRAL_API_KEY=votre_clé_api_mistral_ici
+```
+
+> ⚠️ **Ne partagez jamais votre clé API.** Le fichier `.env` est volontairement exclu du dépôt Git (listé dans `.gitignore`).
+
+### Étape 5 — Lancer l'application
+
+```bash
+python main.py
+```
+
+Ouvrez votre navigateur à l'adresse : **[http://127.0.0.1:5000](http://127.0.0.1:5000)** 🎉
+
+---
+
+## 📁 Structure du projet
+
+```
+2026_[ID]_cap-spe/
+│
+├── 📄 main.py                        ← Point d'entrée de l'application Flask
+├── 📄 prompt.txt                     ← Prompt système du chatbot IA
+├── 📄 requirements.txt               ← Dépendances Python
+├── 📄 licence.txt                    ← Licence GPL v3+
+├── 📄 README.md                      ← Ce fichier
+├── 📄 .env                           ← Variables d'environnement (⚠️ non versionné)
+│
+├── 📁 sources/                       ← Code source Python
+│   ├── 📄 main.py                    ← Application Flask + routes
+│   ├── 📄 parcoursup.py              ← Fonctions de traitement des données
+│   └── 📄 chatbot.py                 ← Intégration API Mistral
+│
+├── 📁 data/                          ← Données du projet
+│   └── 📄 fr-esr-parcoursup.csv      ← Données officielles Parcoursup (data.gouv.fr)
+│
+├── 📁 static/                        ← Ressources statiques
+│   ├── 📁 css/
+│   │   └── 📄 style.css
+│   └── 🖼️  logo.png, ...
+│
+├── 📁 templates/                     ← Pages HTML (Jinja2)
+│   ├── 📄 ACCUEIL.html               ← Page d'accueil
+│   ├── 📄 CHATBOT.html               ← Interface du chatbot
+│   ├── 📄 PROGRAMME.html             ← Présentation des spécialités
+│   ├── 📄 index.html                 ← Simulateur Parcoursup
+│   ├── 📄 CONSEIL.html               ← Conseils et témoignages
+│   └── 📄 HISTOIRE.html              ← Histoire du projet
+│
+├── 📁 test/                          ← Tests unitaires
+│   └── 📄 test_functions.py          ← Tests des fonctions principales
+│
+└── 📁 docs/                          ← Documentation technique
+    └── 📄 architecture.md
+```
+
+---
+
+## 🤖 Le chatbot IA
+
+Le chatbot est propulsé par l'**API Mistral AI** avec le modèle `mistral-small-latest`.
+
+Il est spécialisé grâce à un **prompt système** qui lui donne le rôle d'un conseiller d'orientation scolaire. Il est capable de :
+
+- 🎯 Recommander des combinaisons de spécialités selon le profil de l'élève
+- 📈 Expliquer les liens entre spécialités et filières post-bac
+- ⚠️ Mettre en garde contre les risques de mauvais choix
+- 💬 Adapter son discours au niveau scolaire perçu
+
+**Architecture de la requête :**
+
+```python
+response = client.chat.complete(
+    model="mistral-small-latest",
+    messages=[
+        {"role": "system", "content": prompt},   # Prompt d'orientation
+        {"role": "user",   "content": question}  # Question de l'élève
+    ]
+)
+```
+
+---
+
+## 📊 Le simulateur Parcoursup
+
+Le simulateur utilise le fichier de données officiel **`fr-esr-parcoursup.csv`** publié sur [data.gouv.fr](https://www.data.gouv.fr), traité avec **Pandas**.
+
+### Fonctionnalités
+
+- Filtrage dynamique par **région**, **ville**, **filière** et **établissement**
+- Calcul des **probabilités d'admission** par type de bac (général, technologique, professionnel)
+- Calcul de la **répartition des mentions** des admis
+- Mise à jour des listes déroulantes en temps réel (requêtes AJAX)
+
+### Fonctions principales
+
+| Fonction | Description |
+|---|---|
+| `definition_listes(df)` | Génère les 5 listes de filtres depuis le DataFrame |
+| `selection_infos(...)` | Applique les filtres successifs sur le DataFrame |
+| `calcul_proba_admission(df)` | Calcule les % d'admission par type de bac |
+| `probabilite_mentions(df)` | Calcule la répartition des mentions des admis |
+| `affichage_infos(...)` | Agrège toutes les données pour l'affichage |
+| `change_deroulante(...)` | Met à jour les listes déroulantes dynamiquement |
+
+---
+
+## 🧪 Lancer les tests
+
+Les tests unitaires couvrent les fonctions critiques du simulateur Parcoursup.
+
+```bash
+# Depuis la racine du projet, avec l'environnement virtuel activé :
+pytest test/
+
+# Pour un affichage détaillé :
+pytest test/ -v
+
+# Pour un rapport de couverture :
+pytest test/ --cov=sources
+```
+
+### Tests disponibles
+
+| Test | Fonction couverte | Ce qui est vérifié |
+|------|-------------------|--------------------|
+| `test_definition_listes` | `definition_listes()` | Type tuple, 5 listes triées, non vides |
+| `test_calcul_proba_admission` | `calcul_proba_admission()` | Gestion DataFrame vide, type float, bornes 0–100 |
+| `test_calcul_mention` | `calcul_mention()` | Type float, bornes 0–100 |
+| `test_selection_infos` | `selection_infos()` | Cohérence des filtres, cas vide (région inexistante) |
+| `test_probabilite_mentions` | `probabilite_mentions()` | Valeurs attendues pour un établissement de référence |
+| `test_affichage_infos` | `affichage_infos()` | Structure du dictionnaire de retour |
+| `test_change_deroulante` | `change_deroulante()` | Listes triées, valeurs attendues, cas vide |
+
+---
+
+## 👥 Équipe
+
+<div align="center">
+
+| <img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" width="60"/> | <img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" width="60"/> | <img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" width="60"/> |
+|:---:|:---:|:---:|
+| **Amine** | **Jarod** | **Mouheb** |
+| Créateur & Développeur principal | Restructuration & Architecture | Tests unitaires & Qualité |
+| Back-end Flask, API Mistral, simulateur Parcoursup, design Tailwind | Refactorisation du code, organisation des modules, normes du concours | Fonctions de test, reproductibilité, documentation |
+
+*Terminale NSI — Lycée Isaac Newton, Clichy*
+
+</div>
+
+---
+
+<div align="center">
+
+**Cap Spé** — Projet réalisé dans le cadre des *Trophées NSI 2026*
+
+Lycée Isaac Newton · Clichy · Académie de Versailles
+
+[![Trophées NSI](https://img.shields.io/badge/Troph%C3%A9es_NSI-2026-6D28D9?style=for-the-badge)](https://trophees-nsi.fr)
+
+</div>
