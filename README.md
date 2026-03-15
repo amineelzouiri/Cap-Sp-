@@ -133,39 +133,44 @@ Ouvrez votre navigateur à l'adresse : **[http://127.0.0.1:5000](http://127.0.0.
 ```
 2026_[ID]_cap-spe/
 │
-├── 📄 main.py                        ← Point d'entrée de l'application Flask
-├── 📄 prompt.txt                     ← Prompt système du chatbot IA
-├── 📄 requirements.txt               ← Dépendances Python
-├── 📄 licence.txt                    ← Licence GPL v3+
-├── 📄 README.md                      ← Ce fichier
-├── 📄 .env                           ← Variables d'environnement (⚠️ non versionné)
+├── 📄 app.py                               ← Point d'entrée de l'application Flask
+├── 📄 requirements.txt                     ← Dépendances Python
+├── 📄 licence.txt                          ← Licence GPL v3+
+├── 📄 README.md                            ← Ce fichier
+├── 📄 .env                                 ← Variables d'environnement (⚠️ non versionné)
 │
-├── 📁 sources/                       ← Code source Python
-│   ├── 📄 main.py                    ← Application Flask + routes
-│   ├── 📄 parcoursup.py              ← Fonctions de traitement des données
-│   └── 📄 chatbot.py                 ← Intégration API Mistral
+├── 📁 fonctions/                           ← Modules Python (1 fichier = 1 fonction)
+│   ├── 📄 definir_listes.py               ← Génère les listes des filtres déroulants
+│   ├── 📄 filtrer_donnees.py              ← Applique les filtres sur le DataFrame
+│   ├── 📄 calculer_mention.py             ← Calcul pondéré d'un type de mention
+│   ├── 📄 calculer_probabilites_admission.py ← Probabilités par type de bac
+│   ├── 📄 calculer_repartition_mentions.py   ← Répartition complète des mentions
+│   ├── 📄 construire_resultats.py         ← Agrège toutes les données pour l'affichage
+│   └── 📄 mettre_a_jour_listes.py        ← Mise à jour dynamique des listes (AJAX)
 │
-├── 📁 data/                          ← Données du projet
-│   └── 📄 fr-esr-parcoursup.csv      ← Données officielles Parcoursup (data.gouv.fr)
+├── 📁 static/                              ← Ressources statiques
+│   ├── 📄 fr-esr-parcoursup.csv           ← Données officielles Parcoursup (data.gouv.fr)
+│   ├── 📄 prompt.txt                       ← Prompt système du chatbot IA
+│   ├── 🖼️  amine.png, jarod.png, mouheb.png, logo.png
+│   └── 📁 css/
+│       └── 📄 style.css
 │
-├── 📁 static/                        ← Ressources statiques
-│   ├── 📁 css/
-│   │   └── 📄 style.css
-│   └── 🖼️  logo.png, ...
+├── 📁 templates/                           ← Pages HTML (Jinja2)
+│   ├── 📄 ACCUEIL.html                    ← Page d'accueil
+│   ├── 📄 CHATBOT.html                    ← Interface du chatbot IA
+│   ├── 📄 PROGRAMME.html                  ← Présentation des spécialités
+│   ├── 📄 index.html                       ← Simulateur Parcoursup
+│   ├── 📄 CONSEIL.html                    ← Conseils et témoignages
+│   └── 📄 HISTOIRE.html                   ← Histoire du projet
 │
-├── 📁 templates/                     ← Pages HTML (Jinja2)
-│   ├── 📄 ACCUEIL.html               ← Page d'accueil
-│   ├── 📄 CHATBOT.html               ← Interface du chatbot
-│   ├── 📄 PROGRAMME.html             ← Présentation des spécialités
-│   ├── 📄 index.html                 ← Simulateur Parcoursup
-│   ├── 📄 CONSEIL.html               ← Conseils et témoignages
-│   └── 📄 HISTOIRE.html              ← Histoire du projet
-│
-├── 📁 test/                          ← Tests unitaires
-│   └── 📄 test_functions.py          ← Tests des fonctions principales
-│
-└── 📁 docs/                          ← Documentation technique
-    └── 📄 architecture.md
+└── 📁 tests/                              ← Tests unitaires (1 fichier = 1 fonction)
+    ├── 📄 test_definir_listes.py
+    ├── 📄 test_filtrer_donnees.py
+    ├── 📄 test_calculer_mention.py
+    ├── 📄 test_calculer_probabilites_admission.py
+    ├── 📄 test_calculer_repartition_mentions.py
+    ├── 📄 test_construire_resultats.py
+    └── 📄 test_mettre_a_jour_listes.py
 ```
 
 ---
@@ -208,14 +213,15 @@ Le simulateur utilise le fichier de données officiel **`fr-esr-parcoursup.csv`*
 
 ### Fonctions principales
 
-| Fonction | Description |
-|---|---|
-| `definition_listes(df)` | Génère les 5 listes de filtres depuis le DataFrame |
-| `selection_infos(...)` | Applique les filtres successifs sur le DataFrame |
-| `calcul_proba_admission(df)` | Calcule les % d'admission par type de bac |
-| `probabilite_mentions(df)` | Calcule la répartition des mentions des admis |
-| `affichage_infos(...)` | Agrège toutes les données pour l'affichage |
-| `change_deroulante(...)` | Met à jour les listes déroulantes dynamiquement |
+| Fonction | Fichier | Description |
+|---|---|---|
+| `definir_listes(df)` | `fonctions/definir_listes.py` | Génère les 5 listes de filtres depuis le DataFrame |
+| `filtrer_donnees(...)` | `fonctions/filtrer_donnees.py` | Applique les filtres successifs sur le DataFrame |
+| `calculer_probabilites_admission(df)` | `fonctions/calculer_probabilites_admission.py` | Calcule les % d'admission par type de bac |
+| `calculer_mention(colonne, data)` | `fonctions/calculer_mention.py` | Calcul pondéré d'un type de mention |
+| `calculer_repartition_mentions(df)` | `fonctions/calculer_repartition_mentions.py` | Répartition complète des 4 mentions |
+| `construire_resultats(...)` | `fonctions/construire_resultats.py` | Agrège toutes les données pour l'affichage |
+| `mettre_a_jour_listes(...)` | `fonctions/mettre_a_jour_listes.py` | Met à jour les listes déroulantes (AJAX) |
 
 ---
 
@@ -236,15 +242,15 @@ pytest test/ --cov=sources
 
 ### Tests disponibles
 
-| Test | Fonction couverte | Ce qui est vérifié |
+| Fichier de test | Fonction testée | Ce qui est vérifié |
 |------|-------------------|--------------------|
-| `test_definition_listes` | `definition_listes()` | Type tuple, 5 listes triées, non vides |
-| `test_calcul_proba_admission` | `calcul_proba_admission()` | Gestion DataFrame vide, type float, bornes 0–100 |
-| `test_calcul_mention` | `calcul_mention()` | Type float, bornes 0–100 |
-| `test_selection_infos` | `selection_infos()` | Cohérence des filtres, cas vide (région inexistante) |
-| `test_probabilite_mentions` | `probabilite_mentions()` | Valeurs attendues pour un établissement de référence |
-| `test_affichage_infos` | `affichage_infos()` | Structure du dictionnaire de retour |
-| `test_change_deroulante` | `change_deroulante()` | Listes triées, valeurs attendues, cas vide |
+| `test_definir_listes.py` | `definir_listes()` | Type tuple, 5 listes triées, non vides |
+| `test_filtrer_donnees.py` | `filtrer_donnees()` | Cohérence des filtres, cas vide (région inexistante) |
+| `test_calculer_mention.py` | `calculer_mention()` | Type float, bornes 0–100 |
+| `test_calculer_probabilites_admission.py` | `calculer_probabilites_admission()` | Gestion DataFrame vide, type float, bornes 0–100 |
+| `test_calculer_repartition_mentions.py` | `calculer_repartition_mentions()` | Valeurs attendues pour un établissement de référence |
+| `test_construire_resultats.py` | `construire_resultats()` | Structure du dictionnaire de retour |
+| `test_mettre_a_jour_listes.py` | `mettre_a_jour_listes()` | Listes triées, valeurs attendues, cas vide |
 
 ---
 
