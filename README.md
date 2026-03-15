@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://cdn-icons-png.flaticon.com/512/16533/16533390.png" width="120" alt="Cap Spé Logo"/>
+<img src="https://media.discordapp.net/attachments/764558949818040341/1482761696799100939/logo_lycee.png?ex=69b820f0&is=69b6cf70&hm=a39642ea34c2870de80d869ad4c3286f2036fb67a17d3885f4f2355d55466617&=&format=webp&quality=lossless&width=350&height=370" width="120" alt="Cap Spé Logo"/>
 
 # 🎓 Cap Spé
 
@@ -136,7 +136,7 @@ python app.py
 ## 📁 Structure du projet
 
 ```
-2026_[ID]_cap-spe/
+cap-spe/
 │
 ├── 📄 app.py                               ← Point d'entrée de l'application Flask
 ├── 📄 requirements.txt                     ← Dépendances Python
@@ -277,7 +277,7 @@ pytest test/ --cov=sources
       <i>Conception de l'architecture, développement full-stack, intégration API Mistral, simulateur Parcoursup</i>
     </td>
     <td align="center" width="280">
-      <img src="static/anas.png" width="80" style="border-radius:50%"/><br><br>
+      <img src="https://media.discordapp.net/attachments/764558949818040341/1482761674678210661/IMG_8696.jpg?ex=69b820eb&is=69b6cf6b&hm=d85d63196a28d1893843eae5c72500b70a44baa717ecd86d2512dee072a84376&=&format=webp&width=589&height=940" width="80" style="border-radius:50%"/><br><br>
       <img src="https://img.shields.io/badge/Jarod-Architecture-8b5cf6?style=for-the-badge&logoColor=white"/>
       <br><br>
       <b>Restructuration & Qualité</b><br><br>
