@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="fr" x-data="{
+    selected: 'nsi',
+    mobileMenuOpen: false
+}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programme - CapSpé</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="static/logo.png">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            min-height: 100vh;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+
+        /* Glass Effect */
+        .glass {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+            background-size: 300% 300%;
+            animation: gradient 6s ease infinite;
+        }
+        @keyframes gradient {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+
+        /* Utilities */
+        [x-cloak] { display: none !important; }
+        .fade-enter { animation: fadeIn 0.6s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Custom Scrollbar for Sidebar */
+        .custom-scroll::-webkit-scrollbar { width: 5px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background-color: #cbd5e0; border-radius: 20px; }
+
+        /* Mobile Select Style */
+        .mobile-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%233b82f6' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 1rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+        }
+
+        /* Sidebar Button States */
+        .btn-sidebar {
+            transition: all 0.2s ease;
+            border-left: 4px solid transparent;
+        }
+        .btn-active {
+            background: white;
+            border-left-color: #3b82f6;
+            color: #2563eb;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transform: translateX(5px);
+        }
+
+        /* Section Box from old code */
+        .section-box {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 1px solid rgba(226, 232, 240, 0.7);
+        }
+        .section-box:hover {
+            box-shadow: 0 15px 30px -5px rgba(0,0,0,0.1);
+            border-color: rgba(199, 210, 254, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: #4f46e5;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.75rem;
+            font-size: 1.25rem;
+        }
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 60px; height: 4px;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+            border-radius: 4px;
+            background-size: 200% 200%;
+            animation: gradient 3s ease infinite;
+        }
+
+        /* List Styling */
+        .content-list li { position: relative; padding-left: 1.5rem; margin-bottom: 0.75rem; }
+        .content-list li:before {
+            content: ''; position: absolute; left: 0; top: 0.65em;
+            width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #6366f1;
+        }
+
+        /* Icons Colors Specifics */
+        .subject-icon { font-size: 3rem; margin-bottom: 1rem; color: #6366f1; transition: all 0.3s ease; text-shadow: 0 4px 6px rgba(99, 102, 241, 0.2); }
+        .subject-icon:hover { transform: scale(1.1); color: #4f46e5; }
+
+        /* Nav Link Animation */
+        .nav-link { position: relative; }
+        .nav-link::after { content: ''; position: absolute; left: 0; bottom: -2px; width: 100%; height: 2px; background: linear-gradient(90deg,#3b82f6,#8b5cf6); transform: scaleX(0); transition: transform 0.3s; }
+        .nav-link:hover::after { transform: scaleX(1); }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <header class="glass sticky top-0 z-50 shadow-sm animate__animated animate__fadeInDown">
+        <div class="container mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-compass text-3xl text-blue-600 animate__animated animate__pulse animate__infinite"></i>
+                <a href="{{ url_for('home') }}" class="text-2xl font-bold text-gray-800">
+                    <h1>Cap<span class="gradient-text">Spé</span></h1>
+                </a>
+            </div>
+
+            <nav class="hidden md:flex space-x-8 font-medium text-gray-600">
+                <a href="{{ url_for('home') }}" class="nav-link hover:text-blue-600 transition">Accueil</a>
+                <a href="{{ url_for('chatbot') }}" class="nav-link hover:text-blue-600 transition">Chatbot</a>
+                <a href="{{ url_for('conseil') }}" class="nav-link hover:text-blue-600 transition">Conseils</a>
+                <a href="{{ url_for('programme') }}" class="nav-link text-blue-600 font-bold">Programme</a>
+                <a href="{{ url_for('index') }}" class="nav-link hover:text-blue-600 transition">Pro/Techno/Général</a>
+            </nav>
+
+            <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden text-gray-700 p-2 focus:outline-none">
+                <i class="fas text-2xl" :class="mobileMenuOpen ? 'fa-times' : 'fa-bars'"></i>
+            </button>
+        </div>
+
+        <div x-show="mobileMenuOpen" x-collapse x-cloak class="md:hidden bg-white/95 backdrop-blur border-t border-gray-100 absolute w-full z-50 shadow-lg">
+            <div class="flex flex-col p-4 space-y-4 font-medium text-gray-700">
+                <a href="{{ url_for('home') }}" class="hover:text-blue-600">Accueil</a>
+                <a href="{{ url_for('chatbot') }}" class="hover:text-blue-600">Chatbot</a>
+                <a href="{{ url_for('conseil') }}" class="hover:text-blue-600">Conseils</a>
+                <a href="{{ url_for('programme') }}" class="text-blue-600">Programme</a>
+                <a href="{{ url_for('index') }}" class="hover:text-blue-600">Mes Chances ?</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 py-8 sm:py-12">
+
+        <div class="text-center mb-8 sm:mb-12 relative z-10">
+            <h4 class="text-3xl md:text-5xl mb-4 gradient-text animate__animated animate__fadeIn underline decoration-2 decoration-grey-500 -translate-y-3">
+                Programme des spécialités
+            </h4>
+            <div class="relative inline-block">
+                <span class="text-xl md:text-2xl font-medium text-indigo-600 relative z-10 px-4 py-2 bg-white rounded-full shadow-sm">
+                    Première
+                </span>
+                <span class="absolute inset-0 bg-indigo-100 rounded-full transform rotate-1 scale-105"></span>
+            </div>
+        </div>
+
+        <div class="md:hidden mb-8 sticky top-20 z-40">
+            <div class="glass rounded-xl p-1 shadow-lg bg-white/90">
+                <select x-model="selected"
+                        class="mobile-select block w-full pl-4 pr-10 py-3 text-base border-none focus:outline-none focus:ring-0 bg-transparent font-bold text-gray-800">
+                    <option value="nsi">💻 NSI - Informatique</option>
+                    <option value="si">🤖 SI - Ingénieur</option>
+                    <option value="physique">⚛️ Physique-Chimie</option>
+                    <option value="svt">🧬 SVT</option>
+                    <option value="hggsp">🌍 HGGSP</option>
+                    <option value="ses">📈 SES - Éco</option>
+                    <option value="hlp">📖 HLP - Humanités</option>
+                    <option value="amc">🎨 AMC - Anglais</option>
+                    <option value="maths">📐 Mathématiques</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-8 items-start relative z-0">
+
+            <aside class="hidden md:block md:w-1/3 lg:w-1/4 sticky top-24 glass rounded-2xl p-4 max-h-[85vh] overflow-y-auto custom-scroll">
+                <h2 class="font-bold text-xl mb-4 gradient-text">Sélectionner</h2>
+                <div class="space-y-2">
+                    <button @click="selected='nsi'" :class="selected==='nsi' ? 'btn-active' : 'text-gray-600 hover:bg-gray-50'" class="btn-sidebar w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 font-medium">
+                        <i class="fas fa-laptop-code w-6 text-center text-[#3b82f6]"></i> NSI
+                    </button>
+                    <button @click="selected='si'" :class="selected==='si' ? 'btn-active' : 'text-gray-600 hover:bg-gray-50'" class="btn-sidebar w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 font-medium">
+                        <i class="fas fa-robot w-6 text-center text-[#3b82f6]"></i> SI
+                    </button>
+                    <button @click="selected='physique'" :class="selected==='physique' ? 'btn-active' : 'text-gray-600 hover:bg-gray-50'" class="btn-sidebar w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 font-medium">
+                        <i class="fas fa-atom w-6 text-center text-[#3b82f6]"></i> Physique-Chimie
+                    </button>
+                    <button @click="selected='svt'" :class="selected==='svt' ? 'btn-active' : 'text-gray-600 hover:bg-gray-50'" class="btn-sidebar w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 font-medium">
+                        <i class="fas fa-dna w-6 text-center text-[#3b82f6]"></i> SVT
+                    </button>
+                    <button @click="selected='hggsp'" :class="selected==='hggsp' ? 'btn-active' : 'text-gray-600 hover:bg-gray-50'" class="btn-sidebar w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 font-medium">
+                        <i class="fas fa-globe-europe w-6 text-center text-[#3b82f6]"></i> HGGSP
+                    </button>
+                    <button @click="selected='ses'" :class="selected==='ses' ? 'btn-active' : 'text-gray-600 hover:bg-gray-50'" class="btn-sidebar w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 font-medium">
+                        <i class="fas fa-chart-line w-6 text-center text-[#3b82f6]"></i> SES
+                    </button>
+                    <button @click="selected='hlp'" :class="selected==='hlp' ? 'btn-active' : 'text-gray-600 hover:bg-gray-50'" class="btn-sidebar w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 font-medium">
+                        <i class="fas fa-book-open w-6 text-center text-[#3b82f6]"></i> HLP
+                    </button>
+                    <button @click="selected='amc'" :class="selected==='amc' ? 'btn-active' : 'text-gray-600 hover:bg-gray-50'" class="btn-sidebar w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 font-medium">
+                        <i class="fas fa-paint-brush w-6 text-center text-[#3b82f6]"></i> AMC
+                    </button>
+                    <button @click="selected='maths'" :class="selected==='maths' ? 'btn-active' : 'text-gray-600 hover:bg-gray-50'" class="btn-sidebar w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 font-medium">
+                        <i class="fas fa-square-root-alt w-6 text-center text-[#3b82f6]"></i> Mathématiques
+                    </button>
+                </div>
+            </aside>
+
+            <div class="w-full md:w-2/3 lg:w-3/4">
+
+                <div x-show="selected==='nsi'" class="glass p-6 sm:p-8 transition-all duration-300 relative z-0 fade-enter">
+                    <div class="flex items-center space-x-4 mb-6">
+                        <i class="fas fa-laptop-code subject-icon text-[#3b82f6]"></i>
+                        <h2 class="text-2xl sm:text-3xl font-bold gradient-text">Numérique et Sciences Informatiques</h2>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="section-box objectives animate__animated animate__fadeInUp">
+                            <h3 class="section-title">🎯 Objectif</h3>
+                            <p class="text-gray-700 leading-relaxed">Découvrir les fondements scientifiques et techniques de l'informatique.<br>
+                            La spécialité NSI apprend à raisonner, modéliser, programmer et comprendre le fonctionnement des systèmes numériques.<br>
+                            Elle développe la logique, la rigueur, la créativité et le travail en équipe.</p>
+                        </div>
+
+                        <div class="section-box topics animate__animated animate__fadeInUp animate__delay-1s">
+                            <h3 class="section-title">📚 Thématiques principales</h3>
+                            <ul class="content-list space-y-3">
+                                <li>💾 Les données – Représentation et manipulation des informations (textes, sons, images, nombres)</li>
+                                <li>⚙️ Les algorithmes – Méthodes pour traiter et structurer les données efficacement</li>
+                                <li>🐍 Les langages – Traduction des algorithmes en programmes exécutables (Python)</li>
+                                <li>🌐 Les machines et réseaux – Architecture, systèmes d'exploitation, Internet et objets connectés</li>
+                                <li>🖥️ Les interfaces – Interaction homme-machine et conception web</li>
+                            </ul>
+                        </div>
+
+                        <div class="section-box">
+                            <h3 class="section-title">👥 Démarche de projet</h3>
+                            <p class="text-gray-700 leading-relaxed">Environ un quart du temps est consacré à un projet collaboratif : les élèves conçoivent une solution numérique concrète (application, robot, jeu, base de données, etc.).<br>
+                            Objectif : appliquer les notions étudiées et expérimenter la logique de travail d'une équipe informatique.</p>
+                        </div>
+
+                        <div class="section-box skills">
+                            <h3 class="section-title">🚀 Compétences développées</h3>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Concevoir et programmer des algorithmes</li>
+                                <li>Modéliser un problème sous forme de flux d'informations</li>
+                                <li>Travailler en équipe sur un projet numérique</li>
+                                <li>Faire preuve d'autonomie, de créativité et de réflexion critique</li>
+                                <li>Utiliser l'informatique de manière responsable et éthique</li>
+                            </ul>
+                        </div>
+
+                        <div class="section-box">
+                            <h3 class="section-title">✨ Ce que ça apporte</h3>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Bases solides pour les études en informatique, mathématiques, ingénierie ou data science</li>
+                                <li>Une vraie culture numérique et une expérience de projet</li>
+                                <li>Développement du raisonnement logique et de la résolution de problèmes complexes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="selected==='si'" class="glass p-6 sm:p-8 transition-all duration-300 relative z-0 fade-enter" x-cloak>
+                    <div class="flex items-center space-x-4 mb-6">
+                        <i class="fas fa-robot subject-icon text-[#3b82f6]"></i>
+                        <h2 class="text-2xl sm:text-3xl font-bold gradient-text">Sciences de l'Ingénieur</h2>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="section-box objectives animate__animated animate__fadeInUp">
+                            <h3 class="section-title">🎯 Objectif</h3>
+                            <p class="text-gray-700 leading-relaxed">Découvrir la démarche de l'ingénieur : comprendre comment les systèmes technologiques sont conçus, comment ils fonctionnent et comment ils répondent aux besoins de la société.<br>
+                            L'accent est mis sur la créativité, la modélisation et la recherche de solutions innovantes et durables.</p>
+                        </div>
+
+                        <div class="section-box topics animate__animated animate__fadeInUp animate__delay-1s">
+                            <h3 class="section-title">📚 Thématiques principales</h3>
+                            <ul class="content-list space-y-3">
+                                <li>🤖 Analyse des systèmes techniques – Étude d'objets (robots, véhicules, bâtiments intelligents)</li>
+                                <li>💡 Lien entre réel et numérique – Capteurs, actionneurs, pilotage, simulation et modélisation</li>
+                                <li>🌱 Innovation et durabilité – Énergie, mobilité, environnement, santé, technologies responsables</li>
+                            </ul>
+                        </div>
+
+                        <div class="section-box skills">
+                            <h3 class="section-title">🚀 Compétences développées</h3>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Concevoir, modéliser et expérimenter des solutions techniques</li>
+                                <li>Utiliser des outils numériques de conception et de simulation</li>
+                                <li>Travailler en équipe et communiquer efficacement</li>
+                                <li>Développer rigueur, curiosité et esprit critique</li>
+                            </ul>
+                        </div>
+
+                        <div class="section-box">
+                            <h3 class="section-title">✨ Ce que ça apporte</h3>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Une vision concrète des sciences et du numérique</li>
+                                <li>Une préparation solide pour les études d'ingénierie, de conception ou de recherche</li>
+                                <li>Compréhension des enjeux technologiques et environnementaux</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="selected==='physique'" class="glass p-6 sm:p-8 transition-all duration-300 relative z-0 fade-enter" x-cloak>
+                    <div class="flex items-center space-x-4 mb-6">
+                        <i class="fas fa-atom subject-icon text-[#3b82f6]"></i>
+                        <h2 class="text-2xl sm:text-3xl font-bold gradient-text">Physique-Chimie</h2>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="section-box objectives animate__animated animate__fadeInUp">
+                            <h3 class="section-title">🎯 Objectif</h3>
+                            <p class="text-gray-700 leading-relaxed">Approfondir la compréhension des phénomènes physiques et chimiques à travers l'expérimentation et la modélisation.<br>
+                            Cette spécialité développe la rigueur scientifique et la capacité à relier théorie et réalité.</p>
+                        </div>
+
+                        <div class="section-box topics animate__animated animate__fadeInUp animate__delay-1s">
+                            <h3 class="section-title">📚 Thématiques principales</h3>
+                            <ul class="content-list space-y-3">
+                                <li>⚗️ Constitution et transformations de la matière – Réactions chimiques, structure moléculaire, chimie organique</li>
+                                <li>🏎️ Mouvements et interactions – Lois de Newton, gravitation, électrostatique, mécanique</li>
+                                <li>⚡ Énergie – Transferts, conversions, travail et rendement énergétique</li>
+                                <li>🌊 Ondes et signaux – Ondes mécaniques, lumière, acoustique, optique</li>
+                            </ul>
+                        </div>
+
+                        <div class="section-box skills">
+                            <h3 class="section-title">🚀 Compétences développées</h3>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Mener une démarche scientifique complète (observer, expérimenter, modéliser)</li>
+                                <li>Analyser et interpréter des données</li>
+                                <li>Communiquer efficacement ses résultats</li>
+                                <li>Utiliser les outils numériques de traitement de données</li>
+                            </ul>
+                        </div>
+
+                        <div class="section-box">
+                            <h3 class="section-title">✨ Ce que ça apporte</h3>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Solide base pour les études en sciences, ingénierie, médecine, informatique ou data</li>
+                                <li>Esprit d'analyse, de rigueur et de raisonnement expérimental</li>
+                                <li>Culture scientifique utile dans les innovations technologiques</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="selected==='svt'" class="glass p-6 sm:p-8 transition-all duration-300 relative z-0 fade-enter" x-cloak>
+                    <div class="flex items-center space-x-4 mb-6">
+                        <i class="fas fa-dna subject-icon text-[#3b82f6]"></i>
+                        <h2 class="text-2xl sm:text-3xl font-bold gradient-text">Sciences de la Vie et de la Terre</h2>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="section-box objectives animate__animated animate__fadeInUp">
+                            <h3 class="section-title">🎯 Objectif</h3>
+                            <p class="text-gray-700 leading-relaxed">Étudier le fonctionnement du vivant et de la Terre, comprendre les phénomènes naturels et les interactions entre humains et environnement.</p>
+                        </div>
+
+                        <div class="section-box topics animate__animated animate__fadeInUp animate__delay-1s">
+                            <h3 class="section-title">📚 Thématiques principales</h3>
+                            <ul class="content-list space-y-3">
+                                <li>🌋 Dynamique de la lithosphère – Subduction, collisions, déformations et magmatisme</li>
+                                <li>🌿 Écosystèmes et environnement – Biodiversité, flux de matière, services écosystémiques</li>
+                                <li>🧬 Corps humain et santé – Génétique, immunité, maladies et thérapies</li>
+                            </ul>
+                        </div>
+
+                        <div class="section-box skills">
+                            <h3 class="section-title">🚀 Compétences développées</h3>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Observer, analyser et modéliser des phénomènes naturels</li>
+                                <li>Exploiter des données expérimentales et cartographiques</li>
+                                <li>Relier les connaissances à des enjeux de santé et d'environnement</li>
+                            </ul>
+                        </div>
+
+                        <div class="section-box">
+                            <h3 class="section-title">✨ Ce que ça apporte</h3>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Compréhension scientifique du vivant et de la planète</li>
+                                <li>Esprit critique face aux enjeux écologiques et sanitaires</li>
+                                <li>Accès à des études en biologie, santé, écologie ou recherche</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="selected==='hggsp'" class="glass p-6 sm:p-8 transition-all duration-300 relative z-0 fade-enter" x-cloak>
+                    <div class="flex items-center space-x-4 mb-6">
+                        <i class="fas fa-globe-europe subject-icon text-[#3b82f6]"></i>
+                        <h2 class="text-2xl sm:text-3xl font-bold gradient-text">HGGSP</h2>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="section-box objectives animate__animated animate__fadeInUp">
+                            <h3 class="section-title">🎯 Objectif</h3>
+                            <p class="text-gray-700 leading-relaxed">Donner aux élèves une compréhension du monde contemporain en croisant histoire, géographie, géopolitique et science politique.<br>
+                            Développe culture générale, autonomie intellectuelle et esprit critique.</p>
+                        </div>
+
+                        <div class="section-box topics animate__animated animate__fadeInUp animate__delay-1s">
+                            <h3 class="section-title">📚 Thématiques principales</h3>
+                            <ul class="content-list space-y-3">
+                                <li>🏛️ La démocratie – Principes, formes et fragilités des régimes démocratiques</li>
+                                <li>🌍 Puissances internationales – États, rivalités, GAFAM, routes de la soie</li>
+                                <li>🗺️ Frontières – Formation, évolution et enjeux géopolitiques</li>
+                                <li>📰 Information et médias – Liberté, manipulation, désinformation</li>
+                                <li>🕌 États et religions – Pouvoir politique et faits religieux</li>
+                            </ul>
+                        </div>
+
+                        <div class="section-box skills">
+                            <h3 class="section-title">🚀 Compétences développées</h3>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Analyser, débattre et argumenter</li>
+                                <li>Interpréter des documents et confronter des points de vue</li>
+                                <li>Développer autonomie et culture politique</li>
+                            </ul>
+                        </div>
+
+                        <div class="section-box">
+                            <h3 class="section-title">✨ Ce que ça apporte</h3>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Culture géopolitique solide et compréhension des enjeux du monde actuel</li>
+                                <li>Préparation aux études en relations internationales, droit, journalisme ou sciences politiques</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="selected==='ses'" class="glass p-6 sm:p-8 transition-all duration-300 relative z-0 fade-enter" x-cloak>
+                    <div class="flex items-center space-x-4 mb-6">
+                        <i class="fas fa-chart-line subject-icon text-[#3b82f6]"></i>
+                        <h2 class="text-2xl sm:text-3xl font-bold gradient-text">SES</h2>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="section-box objectives animate__animated animate__fadeInUp">
+                            <h3 class="section-title">🎯 Objectif</h3>
+                            <p class="text-gray-700 leading-relaxed">Comprendre les mécanismes économiques, sociaux et politiques du monde contemporain.<br>
+                            Développe l'analyse critique et la rigueur du raisonnement.</p>
+                        </div>
+
+                        <div class="section-box topics animate__animated animate__fadeInUp animate__delay-1s">
+                            <h3 class="section-title">📚 Thématiques principales</h3>
+                            <ul class="content-list space-y-3">
+                                <li>💹 Économie – Marchés, défaillances, financement, monnaie et rôle de l'État</li>
+                                <li>👥 Sociologie et politique – Socialisation, liens sociaux, opinion publique, vote</li>
+                                <li>🔄 Regards croisés – Protection sociale et monde du travail</li>
+                            </ul>
+                        </div>
+
+                        <div class="section-box skills">
+                            <h3 class="section-title">🚀 Compétences développées</h3>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Interpréter graphiques, données et documents</li>
+                                <li>Argumenter de manière claire et structurée</li>
+                                <li>Développer l'esprit critique face à l'actualité</li>
+                            </ul>
+                        </div>
+
+                        <div class="section-box">
+                            <h3 class="section-title">✨ Ce que ça apporte</h3>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Compréhension des enjeux économiques et sociaux</li>
+                                <li>Base pour les études en économie, droit, gestion, journalisme ou science politique</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="selected==='hlp'" class="glass p-6 sm:p-8 transition-all duration-300 relative z-0 fade-enter" x-cloak>
+                    <div class="flex items-center space-x-4 mb-6">
+                        <i class="fas fa-book-open subject-icon text-[#3b82f6]"></i>
+                        <h2 class="text-2xl sm:text-3xl font-bold gradient-text">HLP</h2>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="section-box objectives animate__animated animate__fadeInUp">
+                            <h3 class="section-title">🎯 Objectif</h3>
+                            <p class="text-gray-700 leading-relaxed">Relier littérature, philosophie et sciences humaines pour réfléchir aux grandes questions de la culture et de la société.<br>
+                            Développe la capacité à penser, argumenter et analyser des œuvres.</p>
+                        </div>
+
+                        <div class="section-box topics animate__animated animate__fadeInUp animate__delay-1s">
+                            <h3 class="section-title">📚 Thématiques principales</h3>
+                            <ul class="content-list space-y-3">
+                                <li>🗣️ Les pouvoirs de la parole – Rhétorique, éloquence, influence, vérité</li>
+                                <li>🌎 Les représentations du monde – Découvertes, arts, sciences, humanisme</li>
+                            </ul>
+                        </div>
+
+                        <div class="section-box skills">
+                            <h3 class="section-title">🚀 Compétences développées</h3>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Maîtrise de l'expression écrite et orale</li>
+                                <li>Analyse et argumentation critique</li>
+                                <li>Culture générale solide et ouverture d'esprit</li>
+                            </ul>
+                        </div>
+
+                        <div class="section-box">
+                            <h3 class="section-title">✨ Ce que ça apporte</h3>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Excellente préparation pour les études littéraires, juridiques, politiques ou culturelles</li>
+                                <li>Développement d'une pensée rigoureuse et d'une aisance à l'oral</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="selected==='amc'" class="glass p-6 sm:p-8 transition-all duration-300 relative z-0 fade-enter" x-cloak>
+                    <div class="flex items-center space-x-4 mb-6">
+                        <i class="fas fa-paint-brush subject-icon text-[#3b82f6]"></i>
+                        <h2 class="text-2xl sm:text-3xl font-bold gradient-text">AMC</h2>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="section-box objectives animate__animated animate__fadeInUp">
+                            <h3 class="section-title">🎯 Objectif</h3>
+                            <p class="text-gray-700 leading-relaxed">Renforcer la maîtrise de l'anglais tout en explorant les enjeux culturels, politiques et sociaux du monde anglophone.</p>
+                        </div>
+
+                        <div class="section-box topics animate__animated animate__fadeInUp animate__delay-1s">
+                            <h3 class="section-title">📚 Thématiques principales</h3>
+                            <ul class="content-list space-y-3">
+                                <li>🔬 Savoirs, création et innovation – Sciences, médias, numérique, IA, environnement</li>
+                                <li>📢 Représentations et communication – Médias, opinion publique, engagement</li>
+                                <li>🎭 Société et culture – Cinéma, musique, littérature, arts et diversité</li>
+                            </ul>
+                        </div>
+
+                        <div class="section-box skills">
+                            <h3 class="section-title">🚀 Compétences développées</h3>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Compréhension orale et écrite approfondie</li>
+                                <li>Expression claire et argumentée en anglais</li>
+                                <li>Analyse critique des médias anglophones</li>
+                            </ul>
+                        </div>
+
+                        <div class="section-box">
+                            <h3 class="section-title">✨ Ce que ça apporte</h3>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Préparation solide pour des études supérieures internationales ou bilingues</li>
+                                <li>Ouverture culturelle et aisance dans un contexte globalisé</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="selected==='maths'" class="glass p-6 sm:p-8 transition-all duration-300 relative z-0 fade-enter" x-cloak>
+                    <div class="flex items-center space-x-4 mb-6">
+                        <i class="fas fa-square-root-alt subject-icon text-[#3b82f6]"></i>
+                        <h2 class="text-2xl sm:text-3xl font-bold gradient-text">Mathématiques</h2>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="section-box objectives animate__animated animate__fadeInUp">
+                            <h3 class="section-title">🎯 Objectif</h3>
+                            <p class="text-gray-700 leading-relaxed">Approfondir les concepts mathématiques fondamentaux et développer le raisonnement déductif, la modélisation et la résolution de problèmes.<br>
+                            C'est une spécialité qui exige rigueur et abstractisation.</p>
+                        </div>
+
+                        <div class="section-box topics animate__animated animate__fadeInUp animate__delay-1s">
+                            <h3 class="section-title">📚 Thématiques principales</h3>
+                            <ul class="content-list space-y-3">
+                                <li>📈 Algèbre et fonctions – Second degré, polynômes, études de fonctions, trigonométrie</li>
+                                <li>📐 Géométrie – Produit scalaire, vecteurs, géométrie dans l'espace</li>
+                                <li>🎲 Probabilités et statistiques – Variables aléatoires, lois de probabilités, échantillons</li>
+                                <li>🐍 Algorithmique et programmation – Mise en œuvre d'algorithmes et concepts de base</li>
+                            </ul>
+                        </div>
+
+                        <div class="section-box skills">
+                            <h3 class="section-title">🚀 Compétences développées</h3>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Raisonner logiquement et démontrer</li>
+                                <li>Modéliser des situations concrètes</li>
+                                <li>Calculer et appliquer des formules complexes</li>
+                                <li>Utiliser le langage mathématique avec précision</li>
+                            </ul>
+                        </div>
+
+                        <div class="section-box">
+                            <h3 class="section-title">✨ Ce que ça apporte</h3>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Méthodes d'analyse et de synthèse pour toutes les sciences</li>
+                                <li>Base indispensable pour les études en sciences, ingénierie, finance, data science ou médecine</li>
+                                <li>Développement de l'esprit critique et de la résolution de problèmes abstraits</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

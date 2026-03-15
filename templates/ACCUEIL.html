@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CapSpé</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="static/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 24px 40px -10px rgba(59, 130, 246, 0.15), 0 12px 20px -10px rgba(139, 92, 246, 0.08);
+        }
+        .transition-all {
+            transition: all 0.3s cubic-bezier(.4,0,.2,1);
+        }
+        .glass {
+            background: rgba(255,255,255,0.35);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+            backdrop-filter: blur(12px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.18);
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s forwards;
+        }
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            left: 0; bottom: -2px;
+            width: 100%; height: 2px;
+            background: linear-gradient(90deg,#3b82f6,#8b5cf6);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+        .nav-link:hover::after {
+            transform: scaleX(1);
+        }
+        .btn-gradient {
+            background: linear-gradient(90deg,#3b82f6,#8b5cf6);
+            box-shadow: 0 4px 24px 0 rgba(59,130,246,0.15);
+            transition: transform 0.2s;
+        }
+        .btn-gradient:hover {
+            transform: scale(1.07);
+            box-shadow: 0 8px 32px 0 rgba(139,92,246,0.18);
+        }
+        .footer-glass {
+            background: rgba(30,41,59,0.85);
+            backdrop-filter: blur(8px);
+        }
+        .icon-animate:hover {
+            animation: bounce 0.6s;
+        }
+        @keyframes bounce {
+            0%,100%{transform:translateY(0);}
+            50%{transform:translateY(-8px);}
+        }
+    </style>
+</head>
+
+
+<!-- en tete -->
+    <header class="glass shadow-lg sticky top-0 z-50 fade-in" style="animation-delay:0.1s;">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-compass text-3xl text-blue-600 icon-animate"></i>
+                <a href ="{{ url_for('home') }}" class="text-2xl font-bold text-gray-800" </a> <h1> Cap<span class="gradient-text">Spé</span></h1>
+            
+
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <a href="{{ url_for('home') }}" class="nav-link text-indigo-600 hover:text-indigo-800 font-bold">Accueil</a>
+                <a href="{{ url_for('chatbot') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-all">Chatbot</a>
+                <a href="{{ url_for('conseil') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-all">Conseils</a>
+                <a href="{{ url_for('programme') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-all">Programme</a>
+                <a href="{{ url_for('index') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-all">Mes Chances ?</a>
+
+            </nav>
+            <button class="md:hidden text-gray-700 focus:outline-none">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+    </header>
+
+
+
+<body class="font-sans bg-gradient-to-br from-blue-50 via-purple-50 to-white min-h-screen">
+    
+
+    <!-- Section de base  -->
+
+    <section class="relative bg-gradient-to-r from-blue-100 to-purple-100 py-20 md:py-32 overflow-hidden fade-in" style="animation-delay:0.2s;">
+        <div class="container mx-auto px-6 flex flex-col items-center text-center">
+            <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+                <div class="absolute top-20 left-20 w-40 h-40 bg-blue-400 rounded-full filter blur-xl"></div>
+                <div class="absolute bottom-20 right-20 w-60 h-60 bg-purple-400 rounded-full filter blur-xl"></div>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-extrabold text-gray-800 mb-6 drop-shadow-lg">
+                Trouve ta <span class="gradient-text">voie</span> avec CapSpé
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-600 max-w-3xl mb-10 glass px-6 py-4">
+                Le guide ultime pour faire le bon choix de spécialités en Première et réussir ton parcours scolaire.
+            </p>
+            <a href="#about" class="btn-gradient text-white font-semibold px-8 py-3 rounded-full shadow-lg transition-all transform hover:scale-105">
+                Découvrir le projet <i class="fas fa-arrow-down ml-2"></i>
+            </a>
+            <div class="mt-16 floating">
+                <img src="https://cdn-icons-png.flaticon.com/512/16533/16533390.png" alt="Newton le boss" class="w-44 h-44 object-contain drop-shadow-xl">
+            </div>
+        </div>
+    </section>
+
+    <!-- Section presentation des fonctionalités -->
+    <section class="py-16 fade-in" style="animation-delay:0.3s;">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-extrabold text-center text-gray-800 mb-12 gradient-text drop-shadow-lg">Comment CapSpé peut t'aider ?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass p-8 rounded-xl shadow-lg border border-gray-100 card-hover transition-all">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-robot text-2xl text-blue-600 icon-animate"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Chatbot intelligent</h3>
+                    <p class="text-gray-600">Notre chatbot analyse ton profil et te propose des spécialités adaptées à tes compétences et aspirations.</p>
+                </div>
+                <div class="glass p-8 rounded-xl shadow-lg border border-gray-100 card-hover transition-all">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-graduation-cap text-2xl text-purple-600 icon-animate"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Programmes officiels</h3>
+                    <p class="text-gray-600">Plongez dans l’univers de chaque spécialité : explorez, comparez et découvrez ce qui vous attend vraiment.</p>
+                </div>
+                <div class="glass p-8 rounded-xl shadow-lg border border-gray-100 card-hover transition-all">
+                    <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-microphone text-2xl text-indigo-600 icon-animate"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Témoignages</h3>
+                    <p class="text-gray-600">Des retours d'expérience d'anciens élèves pour t'aider à faire le bon choix.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section projet -->
+    <section id="about" class="py-20 bg-gradient-to-r from-blue-100 to-purple-100 relative overflow-hidden fade-in" style="animation-delay:0.4s;">
+        <div class="absolute top-0 left-0 w-72 h-72 bg-blue-300 rounded-full opacity-20 blur-2xl"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-purple-400 rounded-full opacity-20 blur-2xl"></div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10">
+                    <h2 class="text-5xl md:text-6xl font-extrabold text-gray-800 mb-6 gradient-text drop-shadow-lg">
+                        Le projet <span class="gradient-text">CapSpé</span>
+                    </h2>
+                    <p class="text-lg md:text-xl text-gray-700 mb-6 font-medium glass px-4 py-2">
+                        Chaque année, des milliers d'élèves de Seconde se retrouvent perdus face au choix crucial des spécialités pour leur Première. Un mauvais choix peut entraîner des difficultés scolaires, une perte de motivation, voire un décrochage.
+                    </p>
+                    <p class="text-lg md:text-xl text-gray-700 mb-8 font-medium glass px-4 py-2">
+                        CapSpé est né de ce constat. Notre mission : t'accompagner dans ce choix déterminant grâce à des outils adaptés et des conseils personnalisés.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="{{ url_for ('chatbot') }}" class="btn-gradient text-white font-semibold px-8 py-3 rounded-full shadow-lg transition-all transform hover:scale-105">
+                            Pose ta question !
+                        </a>
+                        <a href="#pk" class="border border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold px-8 py-3 rounded-full transition-all">
+                            En savoir plus
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3132/3132739.png" alt="Étudiant CapSpé" class="w-64 h-64 object-contain floating drop-shadow-xl">
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- Prevention -->
+<section id="pk" class="py-16 bg-gradient-to-r from-blue-600 to-purple-600 text-white fade-in" style="animation-delay:0.5s;">
+    <div class="container mx-auto px-6">
+        <h2 class="text-4xl font-extrabold text-center mb-12 gradient-text drop-shadow-lg text-white">Pourquoi c'est important ?</h2>
+        <div class="glass bg-opacity-20 p-8 rounded-xl backdrop-filter backdrop-blur-sm max-w-4xl mx-auto text-lg">
+            <ul class="space-y-4">
+                <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-400 mt-1 mr-3 icon-animate"></i>
+                    <span class="text-white">Les spécialités représentent la plus grande part des épreuves finales du bac (32 % en général/techno)</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-400 mt-1 mr-3 icon-animate"></i>
+                    <span class="text-white">Elles déterminent tes possibilités d'orientation post-bac</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-400 mt-1 mr-3 icon-animate"></i>
+                    <span class="text-white">Un bon choix = plus de motivation et de réussite</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-400 mt-1 mr-3 icon-animate"></i>
+                    <span class="text-white">Évite les changements en cours d'année qui pénalisent ton dossier</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+    <!-- Contribution ( Flask présent) -->
+    <section class="py-16 bg-white fade-in" style="animation-delay:0.6s;">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-extrabold text-center mb-12 gradient-text drop-shadow-lg">Ils ont contribués à CapSpé</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Nombre de premières -->
+                <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <h2 class="text-lg font-semibold mb-2 text-gray-700">Premières</h2>
+                    <span class="text-4xl font-bold text-blue-600" id="premiere-count">
+                        {{ stats.nombre_premieres }}
+                    </span>
+                </div>
+                <!-- Nombre de terminales -->
+                <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <h2 class="text-lg font-semibold mb-2 text-gray-700">Terminales</h2>
+                    <span class="text-4xl font-bold text-blue-600" id="terminales-count">
+                <span>{{ stats.nombre_terminales }}</span>
+                </div>
+                <!-- Nombre de profs -->
+                <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <h2 class="text-lg font-semibold mb-2 text-gray-700">Profs</h2>
+                    <span class="text-4xl font-bold text-indigo-600" id="prof-count">
+                        {{ stats.nombre_profs }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- fin -->
+    <section class="py-20 bg-white fade-in" style="animation-delay:0.7s;">
+        <div class="container mx-auto px-6 text-center"></div>
+            <h2 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-6 gradient-text drop-shadow-lg text-center">Prêt à faire le bon choix ?</h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-10 glass px-6 py-4">
+                Découvre dès maintenant les programmes officiels et explore chaque spécialité.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <a href="{{ url_for('programme') }}" class="btn-gradient text-white font-semibold px-8 py-3 rounded-full shadow-lg transition-all transform hover:scale-105">
+                    Programmes <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+<footer class="bg-gray-900 text-white py-16 relative">
+    <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+            <!-- Logo et description -->
+            <div>
+                <div class="flex items-center space-x-3 mb-6">
+                    <div class="w-12 h-12 rounded-full gradient-bg-indigo-purple flex items-center justify-center">
+                        <i class="fas fa-compass text-blue-400 text-2xl icon-animate"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-black text-white">Cap<span class="gradient-text-primary">Spé</span></h3>
+                        <p class="text-gray-400 text-sm">L'orientation réinventée</p>
+                    </div>
+                </div>
+                <p class="text-gray-400 mb-6 max-w-xs">
+                    L'accompagnement intelligent pour le choix de tes spécialités au lycée.
+                </p>
+                <div class="flex space-x-4">
+                    <a href="https://lyceenewton.fr" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-300 hover:bg-indigo-primary hover:text-white transition-all icon-animate">
+                        <i class="fa-solid fa-school"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Navigation -->
+            <div>
+                <h4 class="text-lg font-semibold text-white mb-6 pb-2 border-b border-gray-800">Navigation</h4>
+                <ul class="space-y-3">
+                    <li>
+                        <a href="{{ url_for('chatbot') }}" class="text-gray-400 hover:text-white transition-all duration-300 relative group inline-block">
+                            <span class="relative z-10">Chatbot</span>
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-primary to-blue-primary group-hover:w-full transition-all duration-300"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('conseil') }}" class="text-gray-400 hover:text-white transition-all duration-300 relative group inline-block">
+                            <span class="relative z-10">Conseils</span>
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-primary to-purple-primary group-hover:w-full transition-all duration-300"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('programme') }}" class="text-gray-400 hover:text-white transition-all duration-300 relative group inline-block">
+                            <span class="relative z-10">Programme</span>
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-primary to-indigo-primary group-hover:w-full transition-all duration-300"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('index') }}" class="text-gray-400 hover:text-white transition-all duration-300 relative group inline-block">
+                            <span class="relative z-10">Simulateur</span>
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-primary to-purple-primary group-hover:w-full transition-all duration-300"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- À propos -->
+            <div>
+                <h4 class="text-lg font-semibold text-white mb-6 pb-2 border-b border-gray-800">À propos</h4>
+                <ul class="space-y-3">
+                    <li>
+                        <a href="{{ url_for('histoire') }}" class="text-gray-400 hover:text-white transition-all duration-300 relative group inline-block">
+                            <span class="relative z-10">Notre histoire</span>
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-primary to-indigo-primary group-hover:w-full transition-all duration-300"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Contact -->
+            <div>
+                <h4 class="text-lg font-semibold text-white mb-6 pb-2 border-b border-gray-800">Contact</h4>
+                <ul class="space-y-4">
+                    <li class="flex items-start group">
+                        <div class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center mr-3 flex-shrink-0 group-hover:bg-indigo-primary transition-colors duration-300">
+                            <i class="fas fa-envelope text-gray-400 text-sm group-hover:text-white transition-colors duration-300"></i>
+                        </div>
+                        <div>
+                            <span class="text-gray-400 text-sm block mb-1">Email</span>
+                            <a href="mailto:ce.0920136y@ac-versailles.fr" class="text-gray-300 hover:text-white transition-colors duration-300 relative group inline-block">
+                                <span class="relative z-10">ce.0920136y@ac-versailles.fr</span>
+                                <span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-blue-primary group-hover:w-full transition-all duration-300"></span>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="flex items-start group">
+                        <div class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center mr-3 flex-shrink-0 group-hover:bg-blue-primary transition-colors duration-300">
+                            <i class="fas fa-phone text-gray-400 text-sm group-hover:text-white transition-colors duration-300"></i>
+                        </div>
+                        <div>
+                            <span class="text-gray-400 text-sm block mb-1">Téléphone</span>
+                            <a href="tel:0141067878" class="text-gray-300 hover:text-white transition-colors duration-300 relative group inline-block">
+                                <span class="relative z-10">01 41 06 78 78</span>
+                                <span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-indigo-primary group-hover:w-full transition-all duration-300"></span>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="flex items-start mt-6 group">
+                        <div class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center mr-3 flex-shrink-0 group-hover:bg-purple-primary transition-colors duration-300">
+                            <i class="fa-solid fa-school text-gray-400 text-sm group-hover:text-white transition-colors duration-300"></i>
+                        </div>
+                        <div>
+                            <span class="text-gray-400 text-sm block mb-1">Établissement</span>
+                            <span class="text-gray-300 relative group inline-block">
+                                <span class="relative z-10">Lycée Isaac Newton – Clichy</span>
+                                <span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-purple-primary group-hover:w-full transition-all duration-300"></span>
+                            </span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    <!-- Élément décoratif subtil -->
+    <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-primary via-indigo-primary to-purple-primary opacity-20"></div>
+</footer>
+
+    <script>
+        // + propre
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.querySelector('.md\\:hidden');
+            const navLinks = document.querySelector('nav');
+            
+            mobileMenuButton.addEventListener('click', function() {
+                navLinks.classList.toggle('hidden');
+                navLinks.classList.toggle('flex');
+                navLinks.classList.toggle('flex-col');
+                navLinks.classList.toggle('absolute');
+                navLinks.classList.toggle('top-16');
+                navLinks.classList.toggle('left-0');
+                navLinks.classList.toggle('right-0');
+                navLinks.classList.toggle('bg-white');
+                navLinks.classList.toggle('p-4');
+                navLinks.classList.toggle('space-y-4');
+                navLinks.classList.toggle('shadow-md');
+            });
+            
+            // scrool propre 
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // animatio degrader scrool
+            const fadeEls = document.querySelectorAll('.fade-in');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting){
+                        entry.target.style.animationPlayState = 'running';
+                    }
+                });
+            }, {threshold: 0.1});
+            fadeEls.forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+</html>

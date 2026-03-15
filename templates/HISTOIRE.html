@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CapSpé - L'Histoire</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@tailwindcss/typography"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        :root {
+            --primary-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .gradient-text {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+        
+        .gradient-bg {
+            background: var(--primary-gradient);
+        }
+        
+        .gradient-border {
+            position: relative;
+            background: white;
+            border-radius: 24px;
+        }
+        
+        .gradient-border::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--primary-gradient);
+            border-radius: 26px;
+            z-index: -1;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(102, 126, 234, 0.6); }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .glowing {
+            animation: glow 3s ease-in-out infinite;
+        }
+        
+        .shimmer-text {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 25%, #667eea 50%, #764ba2 75%, #667eea 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shimmer 4s linear infinite;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.08);
+        }
+        
+        .soft-shadow {
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+        }
+        
+        .hover-lift {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 25px 50px rgba(102, 126, 234, 0.15);
+        }
+        
+        .gradient-btn {
+            background: var(--primary-gradient);
+            color: white;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+        
+        .gradient-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
+        }
+        
+        .gradient-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.7s;
+        }
+        
+        .gradient-btn:hover::after {
+            left: 100%;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 40px;
+            margin-bottom: 50px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            z-index: 2;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 9px;
+            top: 28px;
+            width: 2px;
+            height: calc(100% + 22px);
+            background: linear-gradient(to bottom, #667eea, #764ba2);
+        }
+        
+        .timeline-item:last-child::after {
+            display: none;
+        }
+        
+        .circle-avatar {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            border: 6px solid white;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+        }
+        
+        .circle-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 30px 80px rgba(102, 126, 234, 0.3);
+        }
+        
+        .circle-avatar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: var(--primary-gradient);
+            opacity: 0.1;
+            transform: rotate(45deg);
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(40px);
+            animation: fadeInUp 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        .text-gradient-hover {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            transition: all 0.3s ease;
+            background-size: 200% auto;
+        }
+        
+        .text-gradient-hover:hover {
+            background-position: right center;
+        }
+        
+        .stat-card {
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            border-radius: 24px;
+            padding: 40px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--primary-gradient);
+        }
+        
+        .pulse-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4ade80;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+                @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #3b82f6, e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 24px 40px -10px rgba(59, 130, 246, 0.15), 0 12px 20px -10px rgba(139, 92, 246, 0.08);
+        }
+        .transition-all {
+            transition: all 0.3s cubic-bezier(.4,0,.2,1);
+        }
+        .glass {
+            background: rgba(255,255,255,0.35);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+            backdrop-filter: blur(12px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.18);
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s forwards;
+        }
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            left: 0; bottom: -2px;
+            width: 100%; height: 2px;
+            background: linear-gradient(90deg,#3b82f6,#8b5cf6);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+        .nav-link:hover::after {
+            transform: scaleX(1);
+        }
+        .btn-gradient {
+            background: linear-gradient(90deg,#3b82f6,#8b5cf6);
+            box-shadow: 0 4px 24px 0 rgba(59,130,246,0.15);
+            transition: transform 0.2s;
+        }
+        .btn-gradient:hover {
+            transform: scale(1.07);
+            box-shadow: 0 8px 32px 0 rgba(139,92,246,0.18);
+        }
+        .footer-glass {
+            background: rgba(30,41,59,0.85);
+            backdrop-filter: blur(8px);
+        }
+        .icon-animate:hover {
+            animation: bounce 0.6s;
+        }
+        @keyframes bounce {
+            0%,100%{transform:translateY(0);}
+            50%{transform:translateY(-8px);}
+        }
+
+
+
+
+    </style>
+</head>
+<body class="font-sans bg-gradient-to-br from-gray-50 via-white to-gray-50 min-h-screen overflow-x-hidden">
+    
+   <!-- en tete -->
+    <header class="glass shadow-lg sticky top-0 z-50 fade-in" style="animation-delay:0.1s;">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-compass text-3xl text-blue-600 icon-animate"></i>
+                <a href ="{{ url_for('home') }}" class="text-2xl font-bold text-gray-800" </a> <h1> Cap<span class="gradient-text">Spé</span></h1>
+            
+
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <a href="{{ url_for('home') }}" class="nav-link text-indigo-600 hover:text-indigo-800 font-bold">Accueil</a>
+                <a href="{{ url_for('chatbot') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-all">Chatbot</a>
+                <a href="{{ url_for('conseil') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-all">Conseils</a>
+                <a href="{{ url_for('programme') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-all">Programme</a>
+                <a href="{{ url_for('index') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-all">Mes Chances ?</a>
+
+            </nav>
+            <button class="md:hidden text-gray-700 focus:outline-none">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+    </header>
+
+
+    <!-- Hero Section Épurée -->
+    <section class="relative pt-24 pb-32 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 opacity-90"></div>
+        
+        <!-- Éléments décoratifs abstraits -->
+        <div class="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-blue-200 to-purple-200 rounded-full filter blur-3xl opacity-30 -translate-x-1/2 -translate-y-1/2"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tr from-pink-200 to-purple-200 rounded-full filter blur-3xl opacity-30 translate-x-1/3 translate-y-1/3"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-4xl mx-auto text-center">
+                <div class="inline-flex items-center space-x-3 mb-8">
+                    <div class="p-3 rounded-2xl glass-effect">
+                        <i class="fas fa-history text-2xl gradient-text"></i>
+                    </div>
+                    <span class="text-gray-600 font-medium">Notre histoire</span>
+                </div>
+                
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-black text-gray-900 leading-tight mb-8">
+                    De l'idée<br>
+                    <span class="shimmer-text">à la réalité</span>
+                </h1>
+                
+                <p class="text-xl md:text-2xl text-gray-600 max-w-2xl mx-auto mb-12 leading-relaxed">
+                    Découvrez comment une simple observation a donné naissance à une révolution dans l'orientation scolaire.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <a href="#histoire" class="gradient-btn px-8 py-4 rounded-2xl font-semibold text-lg">
+                        Lire notre histoire <i class="fas fa-arrow-down ml-2"></i>
+                    </a>
+                    <a href="#equipe" class="px-8 py-4 rounded-2xl font-semibold text-lg border-2 border-gray-200 hover:border-transparent hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500 hover:text-white transition-all duration-300">
+                        Rencontrer l'équipe
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Animation de flottement -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 floating">
+            <i class="fas fa-chevron-down text-3xl text-gray-400"></i>
+        </div>
+    </section>
+
+    <!-- Section Histoire - Design Narratif -->
+    <section id="histoire" class="py-24 relative">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <div class="text-center mb-20 fade-in">
+                <h2 class="text-4xl md:text-5xl font-black text-gray-900 mb-6">
+                    La <span class="gradient-text">genèse</span> d'une révolution
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Tout commence par une observation, grandit avec une conviction, et s'accomplit avec une équipe passionnée.
+                </p>
+            </div>
+            
+            <!-- Timeline Verticale Interactive -->
+            <div class="relative">
+                <!-- Ligne centrale décorative -->
+                <div class="absolute left-8 md:left-1/2 transform md:-translate-x-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-400 via-purple-500 to-pink-400 opacity-20"></div>
+                
+                <!-- Étape 1 -->
+                <div class="md:flex items-center mb-32 fade-in" style="animation-delay: 0.1s;">
+                    <div class="md:w-1/2 md:pr-16 md:text-right mb-10 md:mb-0">
+                        <div class="inline-block">
+                            <span class="inline-block px-4 py-1 rounded-full bg-blue-100 text-blue-800 text-sm font-semibold mb-4">
+                                mai 2025 • Le déclic
+                            </span>
+                            <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                                Une observation<br>inquiétante
+                            </h3>
+                            <p class="text-gray-600 leading-relaxed text-left max-w-prose">
+    En tant que délégué de classe, <strong>Amine EL ZOUIRI</strong> a été confronté de près aux limites du système d’orientation.
+<strong>Parcoursup</strong> ne laisse que très peu de marge d’erreur : un mauvais choix de spécialités, un manque d’information ou une stratégie mal adaptée peuvent suffire à fermer définitivement certaines portes.
+    <br><br>
+    Chaque année, des élèves voient ainsi leurs ambitions compromises, non par manque de capacités, mais par défaut d'une compréhension des enjeux réels.
+</p>
+
+
+                        </div>
+                    </div>
+                    
+                    <!-- Point de timeline -->
+                    <div class="flex justify-center md:absolute md:left-1/2 md:transform md:-translate-x-1/2">
+                        <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center shadow-xl z-10 relative">
+                            <i class="fas fa-eye text-white text-xl"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="md:w-1/2 md:pl-16 mt-10 md:mt-0">
+                        <div class="glass-effect p-8 rounded-3xl hover-lift">
+                            <div class="text-6xl text-blue-100 mb-4">
+                                <i class="fas fa-quote-left"></i>
+                            </div>
+                            <p class="text-gray-700 text-lg italic mb-6">
+                                "J’ai vu des élèves très prometteur douter d’eux-mêmes et perdre en motivation, non par manque de talent, mais parce que les choix d’orientation sont complexes et qu’ils nécessitent parfois un accompagnement plus personnalisé. "
+                            </p>
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 mr-4"></div>
+                                <div>
+                                    <p class="font-semibold text-gray-900">Amine EL ZOUIRI</p>
+                                    <p class="text-sm text-gray-500">Initiateur</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Étape 2 -->
+                <div class="md:flex items-center mb-32 fade-in" style="animation-delay: 0.3s;">
+                    <div class="md:w-1/2 md:pr-16 mb-10 md:mb-0 order-2 md:order-1">
+                        <div class="glass-effect p-8 rounded-3xl hover-lift">
+                            <div class="flex items-center mb-6">
+                                <div class="w-14 h-14 rounded-2xl gradient-bg flex items-center justify-center mr-4">
+                                    <i class="fas fa-lightbulb text-white text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-bold text-gray-900">L'idée génératrice</h4>
+                                    <p class="text-gray-500">Un outil intelligent et accessible</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-700">
+                                Plutôt que de se contenter de constater le problème, Amine a imaginé une solution : une plateforme qui utiliserait des outils adapté à la <STRONG>GEN Z</STRONG> pour guider les élèves dans leur choix de spécialités, en tenant compte de leurs compétences, aspirations et du marché actuel.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Point de timeline -->
+                    <div class="flex justify-center md:absolute md:left-1/2 md:transform md:-translate-x-1/2 order-1 md:order-2 mb-10 md:mb-0">
+                        <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center shadow-xl z-10">
+                            <i class="fas fa-brain text-white text-xl"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="md:w-1/2 md:pl-16 md:text-left order-3">
+                        <div class="inline-block">
+                            <span class="inline-block px-4 py-1 rounded-full bg-purple-100 text-purple-800 text-sm font-semibold mb-4">
+                                juin-août 2025 • La conceptualisation
+                            </span>
+                            <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                                Naissance de<br>l'idée CapSpé
+                            </h3>
+<p class="text-gray-600 leading-relaxed">
+    L’idée était simple mais ambitieuse : créer un véritable compagnon numérique capable d’accompagner chaque élève dans ses choix d’orientation. Le site met ainsi à disposition un chatbot conçu pour répondre aux questions sur l’orientation et les programmes officiels, un simulateur post-bac basé sur les données officielles de Parcoursup, ainsi qu’un ensemble de conseils pratiques et de témoignages pour aider les élèves à se projeter et à faire des choix éclairés.
+</p>
+
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Étape 3 -->
+                <div class="md:flex items-center mb-32 fade-in" style="animation-delay: 0.5s;">
+                    <div class="md:w-1/2 md:pr-16 md:text-right mb-10 md:mb-0">
+                        <div class="inline-block">
+                            <span class="inline-block px-4 py-1 rounded-full bg-indigo-100 text-indigo-800 text-sm font-semibold mb-4">
+                                septembre 2025 • Le mentorat
+                            </span>
+                            <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                                L'expertise<br>pédagogique
+                            </h3>
+
+<p class="text-gray-600 leading-relaxed text-left max-w-prose">
+    C’est à ce moment que le projet a pris une nouvelle dimension.
+    <br><br>
+    Par l’intermédiaire de <strong>Sylvain Gibaud</strong>, professeur de Mathématiques et de NSI, cette initiative a été mise en lien avec <strong>Trouve ta première</strong>, un projet porté par <strong>Anas Knanoua</strong>, qui analyse et rend accessibles les données de Parcoursup afin d’aider les élèves à mieux comprendre leurs chances d’admission.
+    <br><br>
+    Cette rencontre a conduit à une véritable fusion des idées et des compétences. À nous trois, nous avons transformé ces projets complémentaires en un outil concret, fiable et réellement utile pour accompagner les élèves dans leurs choix d’orientation.
+</p>
+
+
+
+
+                        </div>
+                    </div>
+                    
+                    <!-- Point de timeline -->
+                    <div class="flex justify-center md:absolute md:left-1/2 md:transform md:-translate-x-1/2">
+                        <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center shadow-xl z-10">
+                            <i class="fas fa-chalkboard-teacher text-white text-xl"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="md:w-1/2 md:pl-16 mt-10 md:mt-0">
+                        <div class="glass-effect p-8 rounded-3xl hover-lift">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 mr-4"></div>
+                                <div>
+                                    <p class="font-semibold text-gray-900">Sylvain Gibaud</p>
+                                    <p class="text-sm text-gray-500">Superviseur Pédagogique</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 italic">
+                                "L'orientation ne doit pas être un parcours semé d'embûches. Avec la bonne technologie et la bonne pédagogie, nous pouvons transformer cette épreuve en une opportunité d'épanouissement."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Équipe - Design Élégant -->
+    <section id="equipe" class="py-24 bg-gradient-to-br from-gray-50 to-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-20 fade-in">
+                <h2 class="text-4xl md:text-5xl font-black text-gray-900 mb-6">
+                    L'équipe <span class="gradient-text">passionnée</span>
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Des profils complémentaires unis par une même vision : transformer l'orientation scolaire.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+                <!-- Amine -->
+                <div class="" style="animation-delay: 0.1s;">
+                    <div class="relative">
+                        <div class="circle-avatar mx-auto glowing">
+                            <img src="/static/amine.jpg" alt="Amine EL ZOUIRI" class="w-full h-full object-cover">
+                        </div>
+                        <div class="absolute -bottom-4 left-1/2 transform -translate-x-1/2">
+                            <div class="px-6 py-2 rounded-full gradient-bg text-white font-semibold shadow-lg">
+                                Initiateur
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-16 text-center">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Amine EL ZOUIRI</h3>
+                        <p class="text-gray-500 mb-6">Eleve de NSI </p>
+                        
+                        <div class="mb-6">
+                            <div class="inline-flex items-center space-x-2">
+                                <i class="fas fa-code text-blue-500"></i>
+                                <span class="text-gray-700 font-medium">Développeur</span>
+                            </div>
+                        </div>
+                        
+                        <p class="text-gray-600 mb-8 leading-relaxed">
+                            "Mon expérience en tant que délégué m'a ouvert les yeux sur un problème systémique. CapSpé est ma réponse pour aider chaque élève à trouver sa voie."
+                        </p>
+                        
+                        <div class="flex justify-center space-x-4">
+                            <a href="mailto:amineelzouiri@gmail.com" class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 hover:bg-blue-600 hover:text-white transition-all">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                            <a href="https://github.com/amineelzouiri" class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 hover:bg-purple-600 hover:text-white transition-all">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sylvain -->
+                <div class="fade-in hover-lift" style="animation-delay: 0.3s;">
+                    <div class="relative">
+                        <div class="circle-avatar mx-auto glowing" style="animation-delay: 1s;">
+                            <img src="/static/gibaud.jpeg" alt="Sylvain Gibaud" class="w-full h-full object-cover">
+                        </div>
+                        <div class="absolute -bottom-4 left-1/2 transform -translate-x-1/2">
+                            <div class="px-6 py-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold shadow-lg">
+                                Superviseur 
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-16 text-center">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Sylvain Gibaud</h3>
+                        <p class="text-gray-500 mb-6">Superviseur Pédagogique</p>
+                        
+                        <div class="mb-6">
+                            <div class="inline-flex items-center space-x-2">
+                                <i class="fas fa-graduation-cap text-purple-500"></i>
+                                <span class="text-gray-700 font-medium">Professeur de NSI</span>
+                            </div>
+                        </div>
+                        
+                        <p class="text-gray-600 mb-8 leading-relaxed">
+                            "Les mathématiques permettent d'apporter une lumière et un point de vue différent sur de multiples choses de notre quotidien. L'orientation en est un parfait exemple"
+                        </p>
+                        
+                        <div class="flex justify-center space-x-4">
+                            <a href="https://fr.linkedin.com/in/sylvain-gibaud-b264342a6" class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 hover:bg-purple-600 hover:text-white transition-all">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Anas -->
+                <div class="fade-in hover-lift" style="animation-delay: 0.5s;">
+                    <div class="relative">
+                        <div class="circle-avatar mx-auto glowing" style="animation-delay: 2s;">
+                        <img src="/static/anas.png" alt="Anas" class="w-full h-full object-cover">
+                        </div>
+                        <div class="absolute -bottom-4 left-1/2 transform -translate-x-1/2">
+                            <div class="px-6 py-2 rounded-full bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-semibold shadow-lg">
+                                L'Architecte
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-16 text-center">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Anas</h3>
+                        <p class="text-gray-500 mb-6">Ancien Eleve </p>
+                        
+                        <div class="mb-6">
+                            <div class="inline-flex items-center space-x-2">
+                                <i class="fas fa-code text-blue-500"></i>
+                                <span class="text-gray-700 font-medium">Contribueur technique</span>
+                            </div>
+                        </div>
+                        
+                        <p class="text-gray-600 mb-8 leading-relaxed">
+                            "Transformer une vision en code fonctionnel est ce qui me passionne. Chaque ligne de code écrite pour CapSpé a pour but d'aider un élève quelque part."
+                        </p>
+                        
+                        <div class="flex justify-center space-x-4">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+<!-- Statistiques Impact -->
+<div class="max-w-4xl mx-auto mt-24">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div class="stat-card text-center fade-in" style="animation-delay: 0.1s;">
+            <div class="text-5xl font-black gradient-text mb-2">+100</div>
+            <p class="text-gray-600">Élèves guidés</p>
+        </div>
+        <div class="stat-card text-center fade-in" style="animation-delay: 0.2s;">
+            <div class="text-5xl font-black gradient-text mb-2">9</div>
+            <p class="text-gray-600">Spécialités couvertes</p>
+        </div>
+        <div class="stat-card text-center fade-in" style="animation-delay: 0.3s;">
+            <div class="text-5xl font-black mb-2">
+                <span class="gradient-text">98</span>
+                <span class="gradient-text">%</span>
+            </div>
+            <p class="text-gray-600">Satisfaction</p>
+        </div>
+        <div class="stat-card text-center fade-in" style="animation-delay: 0.3s;">
+            <div class="text-5xl font-black mb-2">
+                <span class="gradient-text">24</span> <span class="gradient-text">H24</span>
+                <span class="gradient-text"></span>
+            </div>
+            <p class="text-gray-600">Disponibilité</p>
+        </div>
+    </div>
+</div>  
+        </div>
+    </section>
+
+
+
+    <!-- Section Mission & Vision -->
+    <section class="py-24 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-50/30 via-purple-50/30 to-pink-50/30"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-6xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div class="fade-in">
+                        <h2 class="text-4xl md:text-5xl font-black text-gray-900 mb-8">
+                            Notre <span class="gradient-text">mission</span><br>
+                            et notre <span class="shimmer-text">vision</span>
+                        </h2>
+                        
+                        <div class="space-y-8">
+                            <div class="flex items-start space-x-4">
+                                <div class="w-12 h-12 rounded-xl gradient-bg flex-shrink-0 flex items-center justify-center">
+                                    <i class="fas fa-bullseye text-white text-lg"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-gray-900 mb-2">Notre Mission</h3>
+                                    <p class="text-gray-600">
+                                        Démocratiser l'accès à une orientation éclairée pour chaque élève, en combinant technologie avancée et expertise pédagogique.
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-4">
+                                <div class="w-12 h-12 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 flex-shrink-0 flex items-center justify-center">
+                                    <i class="fas fa-eye text-white text-lg"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-gray-900 mb-2">Notre Vision</h3>
+                                    <p class="text-gray-600">
+                                        Devenir la référence en matière d'orientation scolaire, en réduisant significativement le taux d'échec lié aux mauvais choix de spécialités.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="fade-in" style="animation-delay: 0.3s;">
+                        <div class="relative">
+                            <div class="glass-effect p-10 rounded-3xl shadow-2xl">
+                                <div class="text-7xl text-gray-100 mb-8">
+                                    <i class="fas fa-quote-right"></i>
+                                </div>
+                                <p class="text-2xl md:text-3xl font-medium text-gray-800 mb-10 leading-relaxed">
+                                    "Nous croyons que chaque élève mérite de construire son avenir sur des choix éclairés, et non sur des doutes."
+                                </p>
+                                <div class="flex items-center">
+                                    <div class="ml-auto">
+                                        <p class="font-bold text-gray-900 text-right">L'équipe CapSpé</p>
+                                        <p class="text-gray-500 text-right">Acteur de l'orientation intelligente</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Élément décoratif -->
+                            <div class="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 opacity-10"></div>
+                            <div class="absolute -bottom-6 -left-6 w-32 h-32 rounded-full bg-gradient-to-r from-pink-400 to-purple-400 opacity-10"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Final -->
+    <section class="py-24 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-90"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-4xl md:text-6xl font-black text-white mb-8">
+                    Prêt à écrire<br>
+                    <span class="shimmer-text">votre histoire</span> ?
+                </h2>
+                
+                <p class="text-xl text-white/90 mb-12 max-w-2xl mx-auto leading-relaxed">
+                    Rejoignez les élèves qui ont déjà trouvé leur voie grâce à CapSpé.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                    <a href="{{ url_for('chatbot') }}" class="px-10 py-5 bg-white text-gray-900 rounded-2xl font-bold text-lg hover:bg-gray-100 hover:scale-105 transition-all duration-300 shadow-2xl">
+                        <i class="fas fa-robot mr-3"></i>
+                        Essayer le chatbot
+                    </a>
+                    <a href="{{ url_for('programme') }}" class="px-10 py-5 bg-transparent border-2 border-white text-white rounded-2xl font-bold text-lg hover:bg-white/10 hover:scale-105 transition-all duration-300">
+                        <i class="fas fa-book-open mr-3"></i>
+                        Explorer les programmes
+                    </a>
+                </div>
+                
+                <div class="mt-16 text-white/70">
+                    <p class="text-sm">
+                        <i class="fas fa-star mr-2"></i>
+                        Rejoignez-nous dans cette aventure pour transformer l'orientation scolaire
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Éléments décoratifs animés -->
+        <div class="absolute top-1/4 left-10 w-64 h-64 rounded-full bg-white/5 floating"></div>
+        <div class="absolute bottom-1/4 right-10 w-80 h-80 rounded-full bg-white/5 floating" style="animation-delay: 2s;"></div>
+    </section>
+
+<!-- le bas -->
+<footer class="bg-gray-900 text-white py-16 relative">
+    <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+            <div>
+                <div class="flex items-center space-x-3 mb-6">
+                    <div class="w-12 h-12 rounded-full gradient-bg-indigo-purple flex items-center justify-center">
+                        <i class="fas fa-compass text-blue-400 text-2xl icon-animate"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-black text-white">Cap<span class="gradient-text-primary">Spé</span></h3>
+                        <p class="text-gray-400 text-sm">L'orientation réinventée</p>
+                    </div>
+                </div>
+                <p class="text-gray-400 mb-6 max-w-xs">
+                    L'accompagnement intelligent pour le choix de tes spécialités au lycée.
+                </p>
+                <div class="flex space-x-4">
+                    <a href="https://lyceenewton.fr" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-300 hover:bg-indigo-primary hover:text-white transition-all icon-animate">
+                        <i class="fa-solid fa-school"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div>
+                <h4 class="text-lg font-semibold text-white mb-6 pb-2 border-b border-gray-800">Navigation</h4>
+                <ul class="space-y-3">
+                    <li>
+                        <a href="{{ url_for('chatbot') }}" class="text-gray-400 hover:text-white transition-all duration-300 relative group inline-block">
+                            <span class="relative z-10">Chatbot</span>
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-primary to-blue-primary group-hover:w-full transition-all duration-300"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('conseil') }}" class="text-gray-400 hover:text-white transition-all duration-300 relative group inline-block">
+                            <span class="relative z-10">Conseils</span>
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-primary to-purple-primary group-hover:w-full transition-all duration-300"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('programme') }}" class="text-gray-400 hover:text-white transition-all duration-300 relative group inline-block">
+                            <span class="relative z-10">Programme</span>
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-primary to-indigo-primary group-hover:w-full transition-all duration-300"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('index') }}" class="text-gray-400 hover:text-white transition-all duration-300 relative group inline-block">
+                            <span class="relative z-10">Simulateur</span>
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-primary to-purple-primary group-hover:w-full transition-all duration-300"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+        
+            <div>
+                <h4 class="text-lg font-semibold text-white mb-6 pb-2 border-b border-gray-800">À propos</h4>
+                <ul class="space-y-3">
+                    <li>
+                        <a href="{{ url_for('vide') }}" class="text-gray-400 hover:text-white transition-all duration-300 relative group inline-block">
+                            <span class="relative z-10">Notre histoire</span>
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-primary to-indigo-primary group-hover:w-full transition-all duration-300"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            
+            <div>
+                <h4 class="text-lg font-semibold text-white mb-6 pb-2 border-b border-gray-800">Contact</h4>
+                <ul class="space-y-4">
+                    <li class="flex items-start group">
+                        <div class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center mr-3 flex-shrink-0 group-hover:bg-indigo-primary transition-colors duration-300">
+                            <i class="fas fa-envelope text-gray-400 text-sm group-hover:text-white transition-colors duration-300"></i>
+                        </div>
+                        <div>
+                            <span class="text-gray-400 text-sm block mb-1">Email</span>
+                            <a href="mailto:ce.0920136y@ac-versailles.fr" class="text-gray-300 hover:text-white transition-colors duration-300 relative group inline-block">
+                                <span class="relative z-10">ce.0920136y@ac-versailles.fr</span>
+                                <span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-blue-primary group-hover:w-full transition-all duration-300"></span>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="flex items-start group">
+                        <div class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center mr-3 flex-shrink-0 group-hover:bg-blue-primary transition-colors duration-300">
+                            <i class="fas fa-phone text-gray-400 text-sm group-hover:text-white transition-colors duration-300"></i>
+                        </div>
+                        <div>
+                            <span class="text-gray-400 text-sm block mb-1">Téléphone</span>
+                            <a href="tel:0141067878" class="text-gray-300 hover:text-white transition-colors duration-300 relative group inline-block">
+                                <span class="relative z-10">01 41 06 78 78</span>
+                                <span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-indigo-primary group-hover:w-full transition-all duration-300"></span>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="flex items-start mt-6 group">
+                        <div class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center mr-3 flex-shrink-0 group-hover:bg-purple-primary transition-colors duration-300">
+                            <i class="fa-solid fa-school text-gray-400 text-sm group-hover:text-white transition-colors duration-300"></i>
+                        </div>
+                        <div>
+                            <span class="text-gray-400 text-sm block mb-1">Établissement</span>
+                            <span class="text-gray-300 relative group inline-block">
+                                <span class="relative z-10">Lycée Isaac Newton – Clichy</span>
+                                <span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-purple-primary group-hover:w-full transition-all duration-300"></span>
+                            </span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+    
+    <
+    <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-primary via-indigo-primary to-purple-primary opacity-20"></div>
+</footer>
+
+    <script>
+        // c beau
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+            el.style.animationPlayState = 'paused';
+            el.style.animationFillMode = 'both';
+        });
+        
+        // c'est fluide
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // parallexe stylé 
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.parallax-bg');
+            
+            parallaxElements.forEach(el => {
+                const speed = 0.5;
+                el.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+        
+        // responsive un jour responsive toujours
+        const mobileMenuButton = document.querySelector('button.md\\:hidden');
+        const navLinks = document.querySelector('nav');
+        
+        if (mobileMenuButton) {
+            mobileMenuButton.addEventListener('click', () => {
+                navLinks.classList.toggle('hidden');
+                navLinks.classList.toggle('flex');
+                navLinks.classList.toggle('flex-col');
+                navLinks.classList.toggle('absolute');
+                navLinks.classList.toggle('top-16');
+                navLinks.classList.toggle('left-0');
+                navLinks.classList.toggle('right-0');
+                navLinks.classList.toggle('bg-white');
+                navLinks.classList.toggle('p-6');
+                navLinks.classList.toggle('shadow-xl');
+            });
+        }
+        
+        // les statistiques
+        const statCards = document.querySelectorAll('.stat-card');
+        const statObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const numberElement = entry.target.querySelector('.gradient-text');
+                    const finalNumber = parseInt(numberElement.textContent.replace('+', ''));
+                    
+                    if (!isNaN(finalNumber)) {
+                        let currentNumber = 0;
+                        const increment = finalNumber / 30;
+                        
+                        const updateNumber = () => {
+                            currentNumber += increment;
+                            if (currentNumber < finalNumber) {
+                                numberElement.textContent = Math.floor(currentNumber) + (finalNumber > 100 ? '+' : '');
+                                requestAnimationFrame(updateNumber);
+                            } else {
+                                numberElement.textContent = finalNumber + (finalNumber > 100 ? '+' : '');
+                            }
+                        };
+                        
+                        updateNumber();
+                    }
+                    
+                    statObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        statCards.forEach(card => statObserver.observe(card));
+    </script>
+</body>
+</html>

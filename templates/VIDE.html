@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fonctionnalité à venir - CapSpé</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="static/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .glass {
+            background: rgba(255,255,255,0.35);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+            backdrop-filter: blur(12px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.18);
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s forwards;
+        }
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="font-sans bg-gradient-to-br from-blue-50 via-purple-50 to-white min-h-screen flex items-center justify-center">
+    <div class="text-center px-6 py-12 max-w-4xl mx-auto fade-in">
+        <div class="glass p-12 rounded-2xl shadow-xl">
+            <div class="floating mb-8">
+                <i class="fas fa-hourglass-half text-6xl text-purple-500"></i>
+            </div>
+            <h1 class="text-5xl md:text-6xl font-extrabold text-gray-800 mb-6 gradient-text drop-shadow-lg">
+                Fonctionnalité en préparation
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-600 mb-10 glass px-8 py-4 mx-auto max-w-2xl">
+                Nous sommes actuellement à la recherche d'élèves motivés pour pouvoir donner leur ressenti sur leur parcours au lycée et des conseils pour aider les secondes. Si vous souhaitez contribuer et donner votre soutien en témoignant, contactez-moi sur <a href="mailto:amineelzouiri@gmail.com" class="font-semibold text-purple-600">amineelzouiri@gmail.com</a>, chaque aide compte ❤️ !            </p>
+            <div class="relative h-4 bg-gray-200 rounded-full overflow-hidden max-w-md mx-auto mb-10">
+                <div class="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full animate-pulse" style="width: 70%;"></div>
+            </div>
+            <a href="{{ url_for('home') }}" class="inline-block bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold px-8 py-3 rounded-full shadow-lg transition-all transform hover:scale-105">
+                <i class="fas fa-arrow-left mr-2"></i> Retour à l'accueil
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeEls = document.querySelectorAll('.fade-in');
+            fadeEls.forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.1}s`;
+            });
+            // Mettre la barre à 100%
+            const progressBar = document.querySelector('.relative .absolute');
+            if (progressBar) {
+                progressBar.style.width = '50%';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Chances ?</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='image/logo.png') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <link rel="icon" type="image/png" href="static/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Suppression des anciennes alertes */
+        #capspe-alert-container {
+            display: none !important;
+        }
+        
+        /* Système de guidance */
+        .guidance-panel {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 2px solid #bae6fd;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .guidance-panel.hidden {
+            opacity: 0;
+            transform: translateY(-10px);
+            height: 0;
+            padding: 0;
+            margin: 0;
+            border: none;
+            overflow: hidden;
+        }
+        
+        .field-hint {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+        
+        .field-disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4F46E5 0%, #9333EA 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .step-complete .step-number {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        }
+        
+        .step-pending .step-number {
+            background: #e2e8f0;
+            color: #94a3b8;
+        }
+        
+        .hint-bubble {
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 0;
+            background: white;
+            border-radius: 12px;
+            padding: 12px 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            max-width: 300px;
+            z-index: 100;
+            animation: fadeInUp 0.3s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hint-bubble::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 20px;
+            border: 8px solid transparent;
+            border-top-color: white;
+        }
+        
+        .progression-line {
+            height: 2px;
+            background: linear-gradient(90deg, #4F46E5, #9333EA);
+            width: 0%;
+            transition: width 0.5s ease;
+            margin: 0.5rem 0 1.5rem;
+        }
+        
+        .success-checkmark {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: #10B981;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 20px;
+            margin-left: 8px;
+        }
+        
+        /* Animation de pulse pour les champs importants */
+        @keyframes gentlePulse {
+            0%, 100% { 
+                border-color: #cbd5e1;
+                box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+            }
+            50% { 
+                border-color: #4F46E5;
+                box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+            }
+        }
+        
+        .field-highlight {
+            animation: gentlePulse 2s ease-in-out;
+        }
+        
+        /* Mode exploration */
+        .exploration-mode .select-field {
+            border-color: #a78bfa !important;
+        }
+        
+        .exploration-badge {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body class="min-h-screen px-4 sm:px-6 lg:px-8 font-poppins">
+    <!-- en amont -->
+    <header class="glass shadow-lg sticky top-0 z-50 fade-in mb-8" style="animation-delay:0.1s;">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-compass text-3xl text-blue-600"></i>
+                <a href="/" class="text-2xl font-bold text-gray-800">Cap <span class="gradient-text">Spé</span></a>
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <a href="{{ url_for('home') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-all">Accueil</a>
+                <a href="{{ url_for('chatbot') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-all">Chatbot</a>
+                <a href="{{ url_for('conseil') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-all">Conseils</a>
+                <a href="{{ url_for('programme') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-all">Programme</a>
+                <a href="{{ url_for('index') }}" class="nav-link text-indigo-600 hover:text-indigo-800 font-bold">Mes Chances ?</a>
+            </nav>
+            <button class="md:hidden text-gray-700 focus:outline-none">
+                <i data-feather="menu" class="text-2xl"></i>
+            </button>
+        </div>
+    </header>
+    
+    <div class="max-w-6xl mx-auto" data-aos="fade-in">
+        <!-- le header -->
+        <div class="text-center mb-12" data-aos="fade-up">
+            <div class="flex justify-center items-center space-x-4 mb-4">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-800">Évalue tes chances dans les filières qui t'intéressent<span class="gradient-text"> le bac ?</span></h1>
+            </div>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                Remplis les informations ci-dessous pour découvrir les probabilités d'admission selon tes choix.
+            </p>
+        </div>
+        
+        <!-- cmt sa marche bouton -->
+        <div id="guidancePanel" class="guidance-panel" data-aos="fade-up">
+            <div class="flex items-start justify-between">
+                <div class="flex-1">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">
+                        <i class="fas fa-compass text-blue-600 mr-2"></i>
+                        Comment ça marche ?
+                    </h3>
+                    <p class="text-gray-600 text-sm mb-3">
+                        Pour des résultats précis, nous te recommandons de remplir les informations dans l'ordre.
+                        Mais tu peux aussi explorer librement !
+                    </p>
+                    
+                    <!-- Indicateur de progression -->
+                    <div class="progression-line" id="progressionLine"></div>
+                    
+                    <!-- Étapes -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="step-indicator step-active" data-step="1">
+                            <div class="step-number">1</div>
+                            <div>
+                                <div class="text-sm font-medium text-gray-700">Région</div>
+                                <div class="text-xs text-gray-500">Localise-toi</div>
+                            </div>
+                        </div>
+                        <div class="step-indicator step-pending" data-step="2">
+                            <div class="step-number">2</div>
+                            <div>
+                                <div class="text-sm font-medium text-gray-500">Filière</div>
+                                <div class="text-xs text-gray-400">Général/Tech/Pro</div>
+                            </div>
+                        </div>
+                        <div class="step-indicator step-pending" data-step="3">
+                            <div class="step-number">3</div>
+                            <div>
+                                <div class="text-sm font-medium text-gray-500">Spécialité</div>
+                                <div class="text-xs text-gray-400">Précise ton choix</div>
+                            </div>
+                        </div>
+                        <div class="step-indicator step-pending" data-step="4">
+                            <div class="step-number">4</div>
+                            <div>
+                                <div class="text-sm font-medium text-gray-500">Formation</div>
+                                <div class="text-xs text-gray-400">Projet post-bac</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bouton mode exploration -->
+                <button id="toggleExplorationMode" 
+                        class="ml-4 px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors flex items-center">
+                    <i class="fas fa-random mr-2"></i>
+                    <span>Mode libre</span>
+                </button>
+            </div>
+            
+            <!-- Message contextuel pour les 2 modes-->
+            <div id="contextMessage" class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-100 hidden">
+                <div class="flex items-start">
+                    <i class="fas fa-lightbulb text-blue-500 mt-0.5 mr-3"></i>
+                    <div class="flex-1">
+                        <p class="text-sm text-blue-800" id="contextMessageText"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- la base -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Formulaire -->
+            <div class="glass-card p-6 sm:p-8" data-aos="fade-right">
+                <form id="filtrageForm" class="space-y-6">
+                    <!-- Indicateur visuel des étapes -->
+                    <div class="mb-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-medium text-gray-500">Progression</span>
+                            <span id="stepCounter" class="text-sm font-semibold text-indigo-600">Étape 1/4
+                            </span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div id="stepProgress" class="bg-gradient-to-r from-blue-500 to-indigo-500 h-2 rounded-full" style="width: 25%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Région -->
+                    <div class="relative">
+                        <label class="block text-lg font-semibold text-gray-800 mb-3">
+                            1. Sélectionne ta région
+                            <span class="text-sm font-normal text-gray-500">(recommandé en premier)</span>
+                        </label>
+                        <select id="lieu" name="lieu" 
+                                class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition select-style text-gray-700">
+                            <option value="">-- Choisir --</option>
+                        </select>
+                        <div class="field-hint" id="hint-lieu">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Ville / Établissement -->
+                    <div class="relative">
+                        <label class="block text-lg font-semibold text-gray-800 mb-3">
+                            Choisis ta ville ou ton Agglomération
+                            <span class="text-sm font-normal text-gray-500">(optionnel)</span>
+                        </label>
+                        <select id="choix_ville" name="choix_ville" 
+                                class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition select-style text-gray-700 field-disabled">
+                            <option value="">-- Choisir --</option>
+                        </select>
+                        <div class="field-hint" id="hint-ville">
+                            <i class="fas fa-lock text-gray-400"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Filière principale -->
+                    <div class="relative">
+                        <label class="block text-lg font-semibold text-gray-800 mb-3">
+                            2. Choisis ta filière principale
+                        </label>
+                        <select id="choix_dep" name="choix_dep" 
+                                class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition select-style text-gray-700 field-disabled">
+                            <option value="">-- Choisir --</option>
+                        </select>
+                        <div class="field-hint" id="hint-dep">
+                            <i class="fas fa-lock text-gray-400"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Filière détaillée -->
+                    <div class="relative">
+                        <label class="block text-lg font-semibold text-gray-800 mb-3">
+                            3. Précise ta filière
+                        </label>
+                        <select id="choix_fil" name="choix_fil" 
+                                class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition select-style text-gray-700 field-disabled">
+                            <option value="">-- Choisir --</option>
+                        </select>
+                        <div class="field-hint" id="hint-fil">
+                            <i class="fas fa-lock text-gray-400"></i>
+                        </div>
+                    </div>
+
+                    <!-- Filière postbac -->
+                    <div class="relative">
+                        <label class="block text-lg font-semibold text-gray-800 mb-3">
+                            4. Choisis ta filière postbac détaillée
+                        </label>
+                        <select id="choix_postbac" name="choix_postbac" 
+                                class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition select-style text-gray-700 field-disabled">
+                            <option value="">-- Choisir --</option>
+                        </select>
+                        <div class="field-hint" id="hint-postbac">
+                            <i class="fas fa-lock text-gray-400"></i>
+                        </div>
+                    </div>
+
+                    <!-- Bouton reset -->
+                    <button type="button" id="silent-reset-btn" 
+                            class="w-full py-3 bg-gradient-to-r from-gray-600 to-gray-700 text-white font-semibold rounded-xl hover:from-gray-700 hover:to-gray-800 transition-all duration-300 active:scale-95 group">
+                        <div class="flex items-center justify-center">
+                            <i class="fas fa-redo-alt mr-3 group-active:rotate-180 transition-transform duration-300"></i>
+                            <span>Réinitialiser</span>
+                        </div>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Résultats -->
+            <div class="glass-card p-6 sm:p-8 flex flex-col" data-aos="fade-left">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Résultats</h2>
+                    <div id="result-count" class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                        0 résultat
+                    </div>
+                </div>
+                
+                <div id="default-state" class="flex flex-col items-center justify-center h-full py-12">
+                    <p class="text-gray-500 text-center max-w-xs">
+                        Remplisez le formulaire pour voir les probabilités d'admission selon tes critères.
+                    </p>
+                </div>
+                
+                <div id="resultats" class="hidden space-y-4">
+                    <div class="result-card bg-blue-50">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-blue-800">Bacheliers généraux</h3>
+                            <span id="general-proba" class="text-2xl font-bold text-blue-600">0%</span>
+                        </div>
+                        <div class="w-full bg-blue-200 rounded-full h-2.5 mt-2">
+                            <div id="general-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="result-card bg-green-50">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-green-800">Bacheliers professionnels</h3>
+                            <span id="pro-proba" class="text-2xl font-bold text-green-600">0%</span>
+                        </div>
+                        <div class="w-full bg-green-200 rounded-full h-2.5 mt-2">
+                            <div id="pro-bar" class="bg-green-600 h-2.5 rounded-full" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="result-card bg-purple-50">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-purple-800">Bacheliers technologiques</h3>
+                            <span id="tech-proba" class="text-2xl font-bold text-purple-600">0%</span>
+                        </div>
+                        <div class="w-full bg-purple-200 rounded-full h-2.5 mt-2">
+                            <div id="tech-bar" class="bg-purple-600 h-2.5 rounded-full" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mentions au Bac -->
+                <div id="mentions-card" class="hidden mt-8 p-6 rounded-xl border border-blue-100" data-aos="fade-up">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Mentions au Bac</h2>
+                    </div>
+
+                    <div id="mentions-container" class="hidden space-y-4">
+                        <!-- ... (votre section mentions reste pareille) ... -->
+                        <div class="result-card bg-yellow-50">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-semibold text-yellow-800">Mention Très Bien</h3>
+                                <span id="bien-proba" class="text-2xl font-bold text-yellow-600">0%</span>
+                            </div>
+                            <div class="w-full bg-yellow-200 rounded-full h-2.5 mt-2">
+                                <div id="bien-bar" class="bg-yellow-600 h-2.5 rounded-full" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="result-card bg-blue-50">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-semibold text-blue-800">Mention Bien</h3>
+                                <span id="mention-b" class="text-2xl font-bold text-blue-600">0%</span>
+                            </div>
+                            <div class="w-full bg-blue-200 rounded-full h-2.5 mt-2">
+                                <div id="mention-b-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="result-card bg-green-50">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-semibold text-green-800">Mention Assez Bien</h3>
+                                <span id="mention-ab" class="text-2xl font-bold text-green-600">0%</span>
+                            </div>
+                            <div class="w-full bg-green-200 rounded-full h-2.5 mt-2">
+                                <div id="mention-ab-bar" class="bg-green-600 h-2.5 rounded-full" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="result-card bg-gray-50">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-semibold text-gray-800">Sans Mention</h3>
+                                <span id="mention-none" class="text-2xl font-bold text-gray-600">0%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                                <div id="mention-none-bar" class="bg-gray-600 h-2.5 rounded-full" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 text-sm text-gray-500">
+                            <p>Ces pourcentages représentent la répartition des mentions parmi les élèves admis dans cette filière. Les pourcentages non renseignés concernent les candidats libres, pour lesquels les données ne sont pas disponibles.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+    let explorationMode = false;
+    let currentStep = 1;
+    let completedSteps = 0;
+    
+    const guidanceMessages = {
+        'lieu': {
+            title: "Commence par te localiser",
+            message: "Choisis ta région pour adapter les options à ton territoire.",
+            icon: "fas fa-map-marker-alt text-blue-500"
+        },
+        'choix_dep': {
+            title: "Choisis ton type de parcours",
+            message: "Général, Technologique ou Professionnel ? Cela oriente les spécialités proposées.",
+            icon: "fas fa-graduation-cap text-indigo-500"
+        },
+        'choix_fil': {
+            title: "Affine ta spécialité",
+            message: "Précise ton choix parmi les options disponibles.",
+            icon: "fas fa-book text-purple-500"
+        },
+        'choix_postbac': {
+            title: "Projet post-bac",
+            message: "Définis ton objectif après le lycée pour affiner encore plus les résultats.",
+            icon: "fas fa-university text-green-500"
+        }
+    };
+
+    $(document).ready(function() {
+        initGuidanceSystem();
+        updateFieldStates();
+        updateProgress();
+        
+        $('#toggleExplorationMode').click(toggleExplorationMode);
+        $('select').on('focus', function() {
+            if (!explorationMode) {
+                const fieldId = $(this).attr('id');
+                const requiredField = getRequiredField(fieldId);
+                if (requiredField && !$(requiredField).val()) {
+                    highlightField(requiredField);
+                    showContextMessage(fieldId, true);
+                }
+            }
+        });
+    });
+
+    function initGuidanceSystem() {
+        updateHintIcons();
+        checkGuidanceVisibility();
+    }
+
+    function toggleExplorationMode() {
+        explorationMode = !explorationMode;
+        const $btn = $('#toggleExplorationMode');
+        if (explorationMode) {
+            $('body').addClass('exploration-mode');
+            $btn.html('<i class="fas fa-compass mr-2"></i>Mode guidé').addClass('bg-indigo-100 text-indigo-700 border-indigo-300');
+            $('select').removeClass('field-disabled').prop('disabled', false);
+            $('.field-hint').html('<i class="fas fa-unlock text-indigo-500"></i>');
+            showContextMessage('exploration', false, "🎯 Mode exploration activé !");
+        } else {
+            $('body').removeClass('exploration-mode');
+            $btn.html('<i class="fas fa-random mr-2"></i>Mode libre').removeClass('bg-indigo-100 text-indigo-700 border-indigo-300');
+            updateFieldStates();
+            updateHintIcons();
+        }
+    }
+
+    function updateFieldStates() {
+        if (explorationMode) return;
+        const lieuVal = $('#lieu').val();
+        const choixDepVal = $('#choix_dep').val();
+        const choixFilVal = $('#choix_fil').val();
+
+        $('#choix_ville, #choix_dep').prop('disabled', !lieuVal).toggleClass('field-disabled', !lieuVal);
+        $('#choix_fil').prop('disabled', !choixDepVal).toggleClass('field-disabled', !choixDepVal);
+        $('#choix_postbac').prop('disabled', !choixFilVal).toggleClass('field-disabled', !choixFilVal);
+    }
+
+    function updateHintIcons() {
+        $('.field-hint').each(function() {
+            const fieldId = $(this).attr('id').replace('hint-', '');
+            const $field = $('#' + fieldId);
+            if ($field.hasClass('field-disabled') && !explorationMode) {
+                $(this).html('<i class="fas fa-lock text-gray-400"></i>');
+            } else if ($field.val()) {
+                $(this).html('<i class="fas fa-check-circle text-green-500"></i>');
+            } else {
+                $(this).html('<i class="fas fa-info-circle text-blue-400"></i>');
+            }
+        });
+    }
+
+    function updateProgress() {
+        const steps = ['lieu', 'choix_dep', 'choix_fil', 'choix_postbac'];
+        completedSteps = steps.filter(s => $('#' + s).val()).length;
+        const pct = (completedSteps / 4) * 100;
+        $('#stepProgress, #progressionLine').css('width', pct + '%');
+        $('#stepCounter').text(`Étape ${completedSteps}/4`);
+        updateStepIndicators();
+        checkGuidanceVisibility();
+    }
+
+    function updateStepIndicators() {
+        $('.step-indicator').each(function(i) {
+            const stepNum = i + 1;
+            const fields = ['#lieu', '#choix_dep', '#choix_fil', '#choix_postbac'];
+            const $indicator = $(this);
+            if ($(fields[i]).val()) {
+                $indicator.removeClass('step-pending step-active').addClass('step-complete');
+            } else if (i === 0 || $(fields[i-1]).val()) {
+                $indicator.removeClass('step-pending step-complete').addClass('step-active');
+            } else {
+                $indicator.removeClass('step-active step-complete').addClass('step-pending');
+            }
+        });
+    }
+
+    function checkGuidanceVisibility() {
+        $('#guidancePanel').toggleClass('hidden', completedSteps >= 4);
+    }
+
+    function showContextMessage(fieldId, isWarning = false, customMessage = null) {
+        const $box = $('#contextMessage');
+        const $text = $('#contextMessageText');
+        if (customMessage) { $text.text(customMessage); }
+        else if (guidanceMessages[fieldId]) {
+            const g = guidanceMessages[fieldId];
+            $text.html(`<strong>${g.title}</strong> — ${g.message}`);
+            $box.find('i').attr('class', g.icon);
+        }
+        $box.removeClass('hidden');
+        setTimeout(() => $box.addClass('hidden'), 5000);
+    }
+
+    function highlightField(selector) {
+        const $f = $(selector);
+        $f.addClass('field-highlight');
+        setTimeout(() => $f.removeClass('field-highlight'), 2000);
+        $('html, body').animate({ scrollTop: $f.offset().top - 100 }, 500);
+    }
+
+    function getRequiredField(id) {
+        const deps = { 'choix_dep': '#lieu', 'choix_ville': '#lieu', 'choix_fil': '#choix_dep', 'choix_postbac': '#choix_fil' };
+        return deps[id.replace('#','')];
+    }
+
+    /*
+       sys  des Filtre  */
+    $(document).ready(function () {
+        let timer = null;
+        const DEBOUNCE = 200;
+
+        function fillSelect($el, items, placeholder) {
+            const current = $el.val();
+            $el.empty().append(`<option value="">${placeholder}</option>`);
+            (items || []).forEach(v => $el.append(new Option(v, v)));
+            if (current && $el.find(`option[value="${current}"]`).length) {
+                $el.val(current);
+            } else {
+                $el.val('');
+            }
+        }
+
+        function animateBar(selector, value) {
+            const pct = Math.min(Math.max(Number(value) || 0, 0), 100);
+            $(selector).css('width', '0%').animate({ width: pct + '%' }, 600);
+        }
+
+        function init() {
+            $.post("/compute", {}, function (data) {
+                const l = data.listes || data;
+                fillSelect($('#lieu'), l.region, "-- Choisir la région --");
+                fillSelect($('#choix_dep'), l.filiere_agregee, "-- Choisir la filière principale --");
+                updateProgress();
+            });
+        }
+
+        function updateAll() {
+            const payload = {
+                lieu: $('#lieu').val(),
+                choix_ville: $('#choix_ville').val(),
+                choix_dep: $('#choix_dep').val(),
+                choix_fil: $('#choix_fil').val(),
+                choix_postbac: $('#choix_postbac').val()
+            };
+
+            $.post("/change_liste", payload, function (data) {
+                const l = data.listes || data;
+                fillSelect($('#choix_ville'), l.villes, "-- Choisir la ville --");
+                fillSelect($('#choix_fil'), l.filieres, "-- Précise ta filière --");
+                fillSelect($('#choix_postbac'), l.postbacs, "-- Type de formation --");
+                
+                updateFieldStates();
+                updateProgress();
+                updateHintIcons();
+                compute(); 
+            });
+        }
+
+        function compute() {
+            const payload = {
+                lieu: $('#lieu').val(),
+                choix_ville: $('#choix_ville').val(),
+                choix_dep: $('#choix_dep').val(),
+                choix_fil: $('#choix_fil').val(),
+                choix_postbac: $('#choix_postbac').val()
+            };
+            $.post("/compute", payload, function (data) {
+                $('#default-state').fadeOut(200, function () {
+                    $('#resultats, #mentions-card').removeClass('hidden').fadeIn();
+                });
+                $('#result-count').text((data.result_count || 0) + " résultat(s)");
+                const p = data.probas || {};
+                animateBar('#general-bar', p.general);
+                animateBar('#tech-bar', p.tech);
+                animateBar('#pro-bar', p.pro);
+                $('#general-proba').text((p.general || 0) + "%");
+                $('#tech-proba').text((p.tech || 0) + "%");
+                $('#pro-proba').text((p.pro || 0) + "%");
+                
+                const m = data.mentions || {};
+                $('#mentions-container').removeClass('hidden').show();
+                animateBar('#bien-bar', m.tb);
+                animateBar('#mention-b-bar', m.b);
+                animateBar('#mention-ab-bar', m.ab);
+                animateBar('#mention-none-bar', m.none);
+                $('#bien-proba').text((m.tb || 0) + "%");
+                $('#mention-b').text((m.b || 0) + "%");
+                $('#mention-ab').text((m.ab || 0) + "%");
+                $('#mention-none').text((m.none || 0) + "%");
+            });
+        }
+
+        function debounce(fn) {
+            clearTimeout(timer);
+            timer = setTimeout(fn, DEBOUNCE);
+        }
+
+        // --- condition si la ville saute ---
+
+        $('#lieu').on('change', function () {
+            // on reset tout 
+            $('#choix_ville, #choix_dep, #choix_fil, #choix_postbac').val('');
+            debounce(updateAll);
+        });
+
+        $('#choix_dep').on('change', function () {
+            $('#choix_fil').val('');
+            $('#choix_postbac').val('');
+            debounce(updateAll);
+        });
+
+        $('#choix_ville, #choix_fil, #choix_postbac').on('change', function() {
+            debounce(updateAll);
+        });
+
+        $('#silent-reset-btn').click(function() {
+            $('select').val('');
+            $('#default-state').fadeIn(200);
+            $('#resultats, #mentions-card').fadeOut(200);
+            init();
+            initGuidanceSystem();
+            updateFieldStates();
+            updateProgress();
+        });
+
+        init();
+    });
+</script>
+    <script>
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true,
+        });
+    </script>
+
+</body>
+</html>

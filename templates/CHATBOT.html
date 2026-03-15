@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatbot IA - CapSpé</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" type="image/png" href="static/logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Poppins', 'sans-serif'] },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4,0,0.6,1) infinite',
+            'float': 'float 6s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%,100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%); }
+    .chat-container { scrollbar-width: thin; scrollbar-color: #8b5cf6 #f3f4f6; }
+    .chat-container::-webkit-scrollbar { width: 6px; }
+    .chat-container::-webkit-scrollbar-track { background: #f3f4f6; border-radius: 10px; }
+    .chat-container::-webkit-scrollbar-thumb { background-color: #8b5cf6; border-radius: 10px; }
+    .message-enter { animation: messageEnter 0.3s ease-out; }
+    @keyframes messageEnter { from { opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+    .gradient-text { background: linear-gradient(90deg,#3b82f6,#8b5cf6); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .gradient-bg { background: linear-gradient(90deg,#3b82f6,#8b5cf6); }
+    .home-btn { transition: all 0.3s ease; }
+    .home-btn:hover { transform:translateY(-2px); box-shadow:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05);}
+    textarea:focus { outline:none; box-shadow:0 0 0 3px rgba(139,92,246,0.2);}
+     .glass {
+            background: rgba(255,255,255,0.35);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+            backdrop-filter: blur(12px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.18);
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s forwards;
+        }
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            left: 0; bottom: -2px;
+            width: 100%; height: 2px;
+            background: linear-gradient(90deg,#3b82f6,#8b5cf6);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+  </style>
+</head>
+
+ <header class="glass shadow-lg sticky top-0 z-50 fade-in" style="animation-delay:0.1s;">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-compass text-3xl text-blue-600 icon-animate"></i>
+                <h1 class="text-2xl font-bold text-gray-800">Cap<span class="gradient-text">Spé</span></h1>
+            
+
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <a href="{{ url_for('home') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-all">Accueil</a>                <a href="{{ url_for('chatbot') }}" class="nav-link text-indigo-600 hover:text-indigo-800 font-bold">Chatbot</a>
+                <a href="{{ url_for('conseil') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-all">Conseils</a>
+                <a href="{{ url_for('programme') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-all">Programme</a>
+                <a href="{{ url_for('index') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-all">Mes Chances ?</a>
+
+            </nav>
+            <button class="md:hidden text-gray-700 focus:outline-none">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+    </header>
+
+<body class="min-h-screen">
+
+
+  <main class="container mx-auto px-4 sm:px-6 py-8 pt-20">
+    <div class="text-center mb-8">
+      <div class="inline-block mb-4">
+        <div class="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg mx-auto mb-3 gradient-bg">
+          <i class="fas fa-robot text-3xl text-white"></i>
+        </div>
+      </div>
+      <h1 class="text-4xl font-bold mb-2">
+        Assistant <span class="gradient-text">IA</span> CapSpé
+      </h1>
+      <p class="text-gray-600 max-w-md mx-auto">Votre assistant personnel pour choisir vos spécialités et comprendre le lycée</p>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden max-w-5xl mx-auto transform transition-all duration-300 hover:shadow-2xl">
+      
+      <!-- chat -->
+      <div class="gradient-bg p-4 text-white flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow">
+          <i class="fas fa-robot text-xl gradient-text"></i>
+        </div>
+        <div>
+          <h2 class="font-bold">Assistant CapSpé</h2>
+          <div class="flex items-center space-x-1">
+            <span class="w-2 h-2 rounded-full bg-green-300 animate-pulse-slow"></span>
+            <p class="text-xs opacity-90">En ligne</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- message du chat -->
+      <div id="chat" class="chat-container p-6 h-[60vh] overflow-y-auto space-y-4 bg-gradient-to-b from-gray-50 to-gray-100">
+        <div class="flex justify-start message-enter">
+          <div class="max-w-[85%]">
+            <div class="bg-gray-100 text-gray-800 px-5 py-3 rounded-t-2xl rounded-br-2xl shadow-sm">
+              <p class="font-medium">Bonjour ! Je suis l'assistant IA de CapSpé. <span class="text-purple-600">🤖</span></p>
+              <p class="mt-2">Je peux vous aider à choisir vos spécialités et comprendre le fonctionnement du lycée.</p>
+              <p class="mt-2 text-sm text-gray-600">Posez-moi vos questions sur les matières, les coefficients ou les débouchés !</p>
+            </div>
+            <div class="text-xs text-gray-500 mt-1 ml-2">Aujourd'hui à <span id="current-time"></span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- input du chat -->
+      <div class="p-4 border-t border-gray-200 bg-white">
+        <form id="chat-form" class="flex gap-3 items-end">
+          <div class="flex-1 relative">
+            <textarea id="prompt" rows="1" placeholder="Posez votre question ici..."
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-0 resize-none transition-all duration-200"
+              style="min-height: 50px;"></textarea>
+          </div>
+          <button type="submit" class="h-12 w-12 rounded-xl flex items-center justify-center text-white gradient-bg shadow-md hover:shadow-lg transition-all">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </form>
+        <p class="text-xs text-gray-500 mt-3 text-center">
+          <i class="fas fa-info-circle mr-1"></i> CapSpé IA peut faire des erreurs. Vérifiez les informations importantes.
+        </p>
+      </div>
+    </div>
+  </main>
+
+
+  <script>
+
+            // + propre
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.querySelector('.md\\:hidden');
+            const navLinks = document.querySelector('nav');
+            
+            mobileMenuButton.addEventListener('click', function() {
+                navLinks.classList.toggle('hidden');
+                navLinks.classList.toggle('flex');
+                navLinks.classList.toggle('flex-col');
+                navLinks.classList.toggle('absolute');
+                navLinks.classList.toggle('top-16');
+                navLinks.classList.toggle('left-0');
+                navLinks.classList.toggle('right-0');
+                navLinks.classList.toggle('bg-white');
+                navLinks.classList.toggle('p-4');
+                navLinks.classList.toggle('space-y-4');
+                navLinks.classList.toggle('shadow-md');
+            });
+            
+            // scrool propre 
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // animatio degrader scrool
+            const fadeEls = document.querySelectorAll('.fade-in');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting){
+                        entry.target.style.animationPlayState = 'running';
+                    }
+                });
+            }, {threshold: 0.1});
+            fadeEls.forEach(el => observer.observe(el));
+        });
+
+
+
+
+    const chat = document.getElementById("chat");
+    const form = document.getElementById("chat-form");
+    const input = document.getElementById("prompt");
+    const currentTime = document.getElementById("current-time");
+    currentTime.textContent = new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+
+    function escapeHTML(text) { const div = document.createElement('div'); div.textContent=text; return div.innerHTML; }
+    function formatMessage(text) {
+      let html = escapeHTML(text);
+      html = html.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+      html = html.replace(/\*(.*?)\*/g,'<em>$1</em>');
+      html = html.replace(/`(.*?)`/g,'<code class="bg-gray-200 px-1 py-0.5 rounded text-sm">$1</code>');
+      html = html.replace(/\n/g,'<br>');
+      html = html.replace(/^\s*-\s(.*)$/gm,'<li class="list-disc ml-5">$1</li>');
+      html = html.replace(/^\s*\|(.+)\|$/gm,'<div class="overflow-x-auto"><table class="table-auto border-collapse border border-gray-300 w-full"><tr><td>$1</td></tr></table></div>');
+      const keywords=['spécialité','spécialités','lycée','bac','coefficient','débouchés'];
+      keywords.forEach(word=>{html=html.replace(new RegExp(`\\b${word}\\b`,'gi'),`<span class="text-purple-600 font-medium">${word}</span>`);});
+      return html;
+    }
+
+    function createMessageBubble(text,who="user"){
+      const wrap=document.createElement("div");
+      wrap.className=`flex ${who==="user"?"justify-end":"justify-start"} mb-4 message-enter`;
+      const container=document.createElement("div");
+      container.className=`max-w-[85%] ${who==="user"?"text-right":""}`;
+      const bubble=document.createElement("div");
+      bubble.className=who==="user"?"inline-block bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-3 rounded-t-2xl rounded-bl-2xl shadow":"inline-block bg-white text-gray-800 px-4 py-3 rounded-t-2xl rounded-br-2xl shadow border border-gray-100";
+      bubble.innerHTML=formatMessage(text);
+      container.appendChild(bubble);
+      const timeDiv=document.createElement("div");
+      timeDiv.className=`text-xs text-gray-400 mt-1 ${who==="user"?"pr-2":"pl-2"}`;
+      const now=new Date();
+      timeDiv.textContent=now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+      container.appendChild(timeDiv);
+      wrap.appendChild(container);
+      return wrap;
+    }
+
+    function showTypingIndicator(){
+      const typing=document.createElement("div");
+      typing.id="typing-indicator";
+      typing.className="flex justify-start mb-4";
+      const bubble=document.createElement("div");
+      bubble.className="bg-white text-gray-800 px-4 py-3 rounded-t-2xl rounded-br-2xl shadow border border-gray-100";
+      const dots=document.createElement("div"); dots.className="flex space-x-1";
+      for(let i=0;i<3;i++){const dot=document.createElement("div"); dot.className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"; dot.style.animationDelay=`${i*0.15}s`; dots.appendChild(dot);}
+      bubble.appendChild(document.createTextNode("L'assistant écrit "));
+      bubble.appendChild(dots);
+      typing.appendChild(bubble);
+      chat.appendChild(typing);
+      chat.scrollTop=chat.scrollHeight;
+      return typing;
+    }
+
+    function removeTypingIndicator(){const t=document.getElementById("typing-indicator");if(t)t.remove();}
+
+    form.addEventListener("submit",async e=>{
+      e.preventDefault();
+      const prompt=input.value.trim();
+      if(!prompt) return;
+      chat.appendChild(createMessageBubble(prompt,"user"));
+      input.value=""; input.style.height='auto';
+      const typing=showTypingIndicator();
+      try{
+        const res=await fetch("/ask",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt})});
+        const data=await res.json();
+        removeTypingIndicator();
+        chat.appendChild(createMessageBubble(data.response||"⚠️ Erreur : réponse vide","bot"));
+        chat.scrollTop=chat.scrollHeight;
+      }catch(err){
+        removeTypingIndicator();
+        chat.appendChild(createMessageBubble("⚠️ Erreur : impossible de contacter l'IA","bot"));
+        chat.scrollTop=chat.scrollHeight;
+        console.error(err);
+      }
+    });
+
+    input.addEventListener('input',function(){this.style.height='auto';this.style.height=(this.scrollHeight)+'px';});
+
+    // sa flotte
+    const colors=['from-blue-400/20 to-blue-600/20','from-purple-400/20 to-purple-600/20','from-indigo-400/20 to-indigo-600/20'];
+    for(let i=0;i<3;i++){
+      const blob=document.createElement('div');
+      blob.className=`hidden md:block fixed rounded-full w-64 h-64 bg-gradient-to-br ${colors[i]} blur-xl opacity-70 -z-10 animate-float`;
+      blob.style.left=`${Math.random()*80+10}%`;
+      blob.style.top=`${Math.random()*80+10}%`;
+      blob.style.animationDelay=`${i*2}s`;
+      document.body.appendChild(blob);
+    }
+  </script>
+</body>
+</html>

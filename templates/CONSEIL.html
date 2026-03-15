@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="fr" x-data="{ activeTab: 'conseils' }">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conseils & Témoignages - Seconde</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            min-height: 100vh;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            background-size: 300% 300%;
+            animation: gradient 6s ease infinite;
+            font-weight: 700;
+        }
+        @keyframes gradient {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+        .glass {
+            background: rgba(255,255,255,0.9);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            backdrop-filter: blur(16px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.25);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .glass:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.2);
+        }
+        .section-box {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 1px solid rgba(226, 232, 240, 0.7);
+        }
+        .section-box:hover {
+            box-shadow: 0 15px 30px -5px rgba(0,0,0,0.1);
+            border-color: rgba(199, 210, 254, 0.5);
+            transform: translateY(-2px);
+        }
+        .section-title {
+            font-weight: 600;
+            color: #4f46e5;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.75rem;
+            font-size: 1.25rem;
+        }
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+            border-radius: 4px;
+            background-size: 200% 200%;
+            animation: gradient 3s ease infinite;
+        }
+        .content-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .content-list li:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.65em;
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            background: #6366f1;
+        }
+        .audio-player {
+            background: rgba(255,255,255,0.8);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        .audio-player:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+        }
+        .tab-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-bottom: 3px solid transparent;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+        }
+        .tab-btn:hover, .tab-btn.active {
+            background: linear-gradient(0deg, rgba(99, 102, 241, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+            border-bottom-color: #6366f1;
+            color: #4f46e5;
+        }
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #6366f1;
+            box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.2);
+        }
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+         /* Style personnalisé pour les éléments audio */
+        audio {
+            width: 100%;
+            margin-top: 1rem;
+        }
+        audio::-webkit-media-controls-panel {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            border-radius: 12px;
+            padding: 8px;
+        }
+        audio::-webkit-media-controls-play-button,
+        audio::-webkit-media-controls-mute-button {
+            background-color: #6366f1;
+            border-radius: 50%;
+        }
+        audio::-webkit-media-controls-current-time-display,
+        audio::-webkit-media-controls-time-remaining-display {
+            font-family: 'Poppins', sans-serif;
+            color: #4f46e5;
+        }
+        audio::-webkit-media-controls-timeline {
+            background-color: #e0e7ff;
+            border-radius: 10px;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+        audio::-webkit-media-controls-volume-slider {
+            background-color: #e0e7ff;
+            border-radius: 10px;
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+        .tab-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-bottom: 3px solid transparent;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+        }
+        .tab-btn:hover, .tab-btn.active {
+            background: linear-gradient(0deg, rgba(99, 102, 241, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+            border-bottom-color: #6366f1;
+            color: #4f46e5;
+        }
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #6366f1;
+            box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.2);
+        }
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        
+    </style>
+</head>e
+<!-- en tete -->
+    <header class="glass shadow-lg sticky top-0 z-50 fade-in" style="animation-delay:0.1s;">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-compass text-3xl text-blue-600 icon-animate"></i>
+                <a href ="{{ url_for('home') }}" class="text-2xl font-bold text-gray-800" </a> <h1> Cap<span class="gradient-text">Spé</span></h1>
+            
+
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <a href="{{ url_for('home') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-all">Accueil</a>
+                <a href="{{ url_for('chatbot') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-all">Chatbot</a>
+                <a href="{{ url_for('conseil') }}" class="nav-link text-indigo-600 hover:text-indigo-800 font-bold">Conseils</a>
+                <a href="{{ url_for('programme') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-all">Programme</a>
+                <a href="{{ url_for('index') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-all">Mes Chances ?</a>
+
+            </nav>
+            <button class="md:hidden text-gray-700 focus:outline-none">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+    </header>
+
+
+
+<body class="font-sans bg-gradient-to-br from-blue-50 via-purple-50 to-white min-h-screen">
+
+    <main class="container mx-auto px-6 py-12 relative">
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-bold mb-4 gradient-text animate__animated animate__fadeIn">
+                Conseils & Témoignages
+            </h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Découvrez des conseils pratiques et écoutez les témoignages d'élèves de première pour mieux préparer votre orientation.
+            </p>
+        </div>
+
+        <!-- Onglets de navigation -->
+        <div class="flex justify-center mb-8">
+            <div class="glass p-1 rounded-full inline-flex">
+                <button @click="activeTab = 'conseils'" 
+                        :class="{'active': activeTab === 'conseils'}" 
+                        class="tab-btn rounded-l-full">
+                    <i class="fas fa-lightbulb mr-2"></i> Conseils
+                </button>
+                <button @click="activeTab = 'temoignages'" 
+                        :class="{'active': activeTab === 'temoignages'}" 
+                        class="tab-btn rounded-r-full">
+                    <i class="fas fa-microphone-alt mr-2"></i> Témoignages
+                </button>
+            </div>
+        </div>
+
+       <!-- Section Conseils -->
+<div x-show="activeTab === 'conseils'" class="fade-in">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Carte Conseil 1 -->
+        <div class="section-box animate__animated animate__fadeInUp">
+            <div class="flex items-center mb-4">
+                <div class="bg-red-100 p-3 rounded-full mr-4">
+                    <i class="fas fa-ban text-red-600 text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">Ne pas tricher</h3>
+            </div>
+            <p class="text-gray-600 mb-4">
+                La triche peut devenir une mauvaise habitude qui empêche d'apprendre réellement.
+                En Première, elle est considérée comme une fraude en contrôle continu.
+                Développer une méthode de travail honnête est essentiel pour progresser durablement.
+            </p>
+            <div class="bg-red-50 p-3 rounded-lg">
+                <p class="text-red-800 font-medium">
+                    <i class="fas fa-exclamation-circle mr-2 text-red-400"></i>
+                    Une compréhension solide vaut mieux qu'une note obtenue sans effort réel.
+                </p>
+            </div>
+        </div>
+
+        <!-- Carte Conseil 2 -->
+        <div class="section-box animate__animated animate__fadeInUp animate__delay-1s">
+            <div class="flex items-center mb-4">
+                <div class="bg-blue-100 p-3 rounded-full mr-4">
+                    <i class="fas fa-calendar-check text-blue-600 text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">Commencer dès le début de l'année</h3>
+            </div>
+            <p class="text-gray-600 mb-4">
+                Entrer rapidement dans le rythme scolaire permet de mieux gérer la charge de travail des trois spécialités.
+                Travailler régulièrement dès septembre évite d'être dépassé au fil des trimestres.
+            </p>
+            <ul class="list-disc pl-5 text-gray-600 space-y-1">
+                <li>Relire ses cours chaque semaine</li>
+                <li>Anticiper les évaluations</li>
+                <li>Installer une routine stable</li>
+            </ul>
+        </div>
+
+        <!-- Carte Conseil 3 -->
+        <div class="section-box animate__animated animate__fadeInUp animate__delay-2s">
+            <div class="flex items-center mb-4">
+                <div class="bg-green-100 p-3 rounded-full mr-4">
+                    <i class="fas fa-sync-alt text-green-600 text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">Travailler régulièrement</h3>
+            </div>
+            <p class="text-gray-600 mb-4">
+                La régularité est la clé de la réussite : revoir un cours, refaire un exercice,
+                consolider les notions au fur et à mesure est bien plus efficace qu’un travail intensif ponctuel.
+            </p>
+            <div class="flex flex-wrap gap-2">
+                <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Rigueur</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Méthode</span>
+                <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm">Discipline</span>
+            </div>
+        </div>
+
+        <!-- Carte Conseil 4 -->
+        <div class="section-box animate__animated animate__fadeInUp">
+            <div class="flex items-center mb-4">
+                <div class="bg-yellow-100 p-3 rounded-full mr-4">
+                    <i class="fas fa-book-open text-yellow-600 text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">Préparer le bac de français</h3>
+            </div>
+            <p class="text-gray-600 mb-4">
+                Le bac de français nécessite un entraînement régulier : lectures analytiques,
+                entraînements à l'oral, exercices d’écriture. L'IA ne doit pas remplacer ce travail,
+                car le jour de l'épreuve, tu devras restituer tes propres compétences.
+            </p>
+            <div class="flex items-center text-sm text-gray-500">
+                <i class="fas fa-pen-nib mr-2"></i>
+                <span>Une lecture analytique revue chaque semaine facilite énormément l’année.</span>
+            </div>
+        </div>
+
+        <!-- Carte Conseil 5 -->
+        <div class="section-box animate__animated animate__fadeInUp animate__delay-1s">
+            <div class="flex items-center mb-4">
+                <div class="bg-purple-100 p-3 rounded-full mr-4">
+                    <i class="fas fa-graduation-cap text-purple-600 text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">Bien choisir ses spécialités</h3>
+            </div>
+            <p class="text-gray-600 mb-4">
+                Les spécialités doivent correspondre à ton futur domaine d’étude tout en restant cohérentes pour Parcoursup.
+                Un choix réfléchi permet de construire un dossier solide et d’éviter les réorientations non maîtrisées.
+            </p>
+            <div class="bg-purple-50 p-3 rounded-lg">
+                <p class="text-purple-800">
+                    <i class="fas fa-lightbulb mr-2 text-purple-400"></i>
+                    Choisis en fonction de tes objectifs, pas de l'avis des autres.
+                </p>
+            </div>
+        </div>
+
+        <!-- Carte Conseil 6 -->
+        <div class="section-box animate__animated animate__fadeInUp animate__delay-2s">
+            <div class="flex items-center mb-4">
+                <div class="bg-orange-100 p-3 rounded-full mr-4">
+                    <i class="fas fa-chart-line text-orange-600 text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">Construire une méthode efficace</h3>
+            </div>
+            <p class="text-gray-600 mb-4">
+                Développer une organisation claire (fiches, planning, objectifs) améliore la compréhension
+                et renforce la motivation. Une méthode stable te suivra jusqu’en Terminale et dans le supérieur.
+            </p>
+            <div class="flex items-center">
+                <i class="fas fa-check-circle text-orange-400 mr-2"></i>
+                <span class="text-sm text-gray-600">Une bonne méthode = moins de stress et plus de résultats.</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+         <!-- Section Témoignages -->
+        <div x-show="activeTab === 'temoignages'" class="fade-in">
+            <div class="glass p-8 mb-8">
+                <h2 class="text-3xl font-bold mb-6 gradient-text text-center">
+                    <i class="fas fa-headphones mr-3"></i> Témoignages audio
+                </h2>
+                <p class="text-center text-gray-600 mb-8 max-w-2xl mx-auto">
+                    Écoutez les expériences d'anciens élèves de Premières et de Terminales qui partagent leurs conseils et leur vécu. Cliquez sur play pour démarrer l'écoute.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Témoignage 1 -->
+                    <div class="audio-player">
+                        <div class="flex items-start mb-4">
+                            <img src="" alt="Élève" class="avatar mr-4">
+                            <div>
+                                <h3 class="font-bold text-lg">Amine, 17 ans</h3>
+                                <p class="text-gray-500 text-sm">Ancienne élève de Première</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-4">
+                            "Comment j'ai géré la transition entre le collège et le lycée, et mes conseils pour s'adapter rapidement."
+                        </p>
+                        <audio controls class="w-full mt-4" style="height: 50px;">
+                            <source src="" type="audio/mpeg">
+                            Votre navigateur ne supporte pas l'élément audio.
+                        </audio>
+                        <div class="flex items-center mt-3 text-sm text-gray-500">
+                            <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">NSI</span>
+                        </div>
+                    </div>
+
+                    <!-- Témoignage 2 -->
+                    <div class="audio-player">
+                        <div class="flex items-start mb-4">
+                            <img src="" alt="Élève" class="avatar mr-4">
+                            <div>
+                                <h3 class="font-bold text-lg">Jarod, 17 ans</h3>
+                                <p class="text-gray-500 text-sm">Ancienne élève de Première</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-4">
+                            "Mon processus pour choisir mes spécialités et ce que je ferais différemment si c'était à refaire."
+                        </p>
+                        <audio controls class="w-full mt-4">
+                            <source src="" type="audio/mpeg">
+                            Votre navigateur ne supporte pas l'élément audio.
+                        </audio>
+                        <div class="flex items-center mt-3 text-sm text-gray-500">
+                            <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">NSI</span>
+                        </div>
+                    </div>
+
+                    <!-- Témoignage 3 -->
+                    <div class="audio-player">
+                        <div class="flex items-start mb-4">
+                            <img src="" alt="Élève" class="avatar mr-4">
+                            <div>
+                                <h3 class="font-bold text-lg">Martin, 17 ans</h3>
+                                <p class="text-gray-500 text-sm">Ancienne élève de Première</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-4">
+                            "Comment j'ai surmonté mes difficultés en maths en seconde et les méthodes qui ont marché pour moi."
+                        </p>
+                        <audio controls class="w-full mt-4">
+                            <source src="" type="audio/mpeg">
+                            Votre navigateur ne supporte pas l'élément audio.
+                        </audio>
+                        <div class="flex items-center mt-3 text-sm text-gray-500">
+<span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">NSI</span>
+                        </div>
+                    </div>
+
+                    <!-- Témoignage 4 -->
+                    <div class="audio-player">
+                        <div class="flex items-start mb-4">
+                            <img src="" alt="Élève" class="avatar mr-4">
+                            <div>
+                                <h3 class="font-bold text-lg">Maissa, 17 ans</h3>
+                                <p class="text-gray-500 text-sm">Ancienne élève de Première</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-4">
+                            "L'importance des activités extrascolaires et comment j'ai réussi à concilier sport et études."
+                        </p>
+                        <audio controls class="w-full mt-4">
+                            <source src="" type="audio/mpeg">
+                            Votre navigateur ne supporte pas l'élément audio.
+                        </audio>
+                        <div class="flex items-center mt-3 text-sm text-gray-500">
+<span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">NSI</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+<script>
+
+           // + propre
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.querySelector('.md\\:hidden');
+            const navLinks = document.querySelector('nav');
+            
+            mobileMenuButton.addEventListener('click', function() {
+                navLinks.classList.toggle('hidden');
+                navLinks.classList.toggle('flex');
+                navLinks.classList.toggle('flex-col');
+                navLinks.classList.toggle('absolute');
+                navLinks.classList.toggle('top-16');
+                navLinks.classList.toggle('left-0');
+                navLinks.classList.toggle('right-0');
+                navLinks.classList.toggle('bg-white');
+                navLinks.classList.toggle('p-4');
+                navLinks.classList.toggle('space-y-4');
+                navLinks.classList.toggle('shadow-md');
+            });
+            
+            // scrool propre 
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // animatio degrader scrool
+            const fadeEls = document.querySelectorAll('.fade-in');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting){
+                        entry.target.style.animationPlayState = 'running';
+                    }
+                });
+            }, {threshold: 0.1});
+            fadeEls.forEach(el => observer.observe(el));
+        });
+
+
+
+
+
+
+
+
+
+
+    // Animation au chargement de la page
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof anime !== 'undefined') {
+            // Animation des cartes
+            anime({
+                targets: '.specialty-card',
+                opacity: [0, 1],
+                translateY: [20, 0],
+                duration: 800,
+                delay: anime.stagger(100)
+            });
+            
+            // Animation des boutons
+            anime({
+                targets: '.specialty-btn',
+                opacity: [0, 1],
+                translateX: [-20, 0],
+                duration: 600,
+                delay: anime.stagger(50),
+                easing: 'easeOutElastic(1, .8)'
+            });
+            
+            // Effet de vague pour le header
+            anime({
+                targets: 'header',
+                translateY: [-50, 0],
+                opacity: [0, 1],
+                duration: 800,
+                easing: 'easeOutExpo'
+            });
+        }
+    });
+    
+    // Changement de matière avec animation (Alpine)
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('subjectTransition', () => ({
+            selected: 'nsi',
+            changeSubject(newSubject) {
+                if (typeof anime !== 'undefined') {
+                    anime({
+                        targets: `[x-show="selected==='${this.selected}'"]`,
+                        opacity: 0,
+                        translateY: 20,
+                        duration: 300,
+                        easing: 'easeInQuad',
+                        complete: () => {
+                            this.selected = newSubject;
+                            anime({
+                                targets: `[x-show="selected==='${this.selected}'"]`,
+                                opacity: [0, 1],
+                                translateY: [20, 0],
+                                duration: 500,
+                                easing: 'easeOutQuad'
+                            });
+                        }
+                    });
+                } else {
+                    this.selected = newSubject;
+                }
+            }
+        }));
+    });
+</script>
+</body>
+</html>
+
+</html>
