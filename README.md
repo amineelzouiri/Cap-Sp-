@@ -66,64 +66,72 @@ Cap Spé
 
 ## 🚀 Installation et lancement
 
-> ⚠️ **Clé API Mistral non fournie** — Le chatbot nécessite une clé API Mistral pour fonctionner. Si vous souhaitez tester le chatbot sans installation, rendez-vous directement sur **[capspe.fr](https://capspe.fr)**
+> ⚠️ **Clé API non fournie** — Le chatbot nécessite une clé API Mistral pour fonctionner en local.
+> Vous pouvez tester le chatbot directement en ligne sur **[capspe.fr](https://capspe.fr)** 🌐
 
 ---
 
-### Option A — Via Git
+<details>
+<summary>🔵 &nbsp;<b>Option A — Via Git</b></summary>
+<br>
 
-**Étape 1 — Cloner le dépôt**
+**1️⃣ Cloner le dépôt**
 ```bash
 git clone https://github.com/amineelzouiri/Cap-Sp-
 cd Cap-Sp-
 ```
 
-**Étape 2 — Installer les dépendances**
+**2️⃣ Installer les dépendances**
 ```bash
 pip install -r requirements.txt
 ```
 
-**Étape 3 — Configurer la clé API**
+**3️⃣ Configurer la clé API**
 
-Créez un fichier `.env` à la racine du projet et ajoutez :
+Créez un fichier `.env` à la racine du projet :
 ```env
 API_KEY=votre_clé_api_mistral_ici
 ```
 
-**Étape 4 — Lancer l'application**
+**4️⃣ Lancer l'application**
 ```bash
 python app.py
 ```
 
+</details>
+
 ---
 
-### Option B — Via ZIP
+<details>
+<summary>🟣 &nbsp;<b>Option B — Via ZIP</b></summary>
+<br>
 
-**Étape 1 — Télécharger le projet**
+**1️⃣ Télécharger le projet**
 
-Sur GitHub : bouton vert **"Code"** → **"Download ZIP"**, puis extraire le dossier.
+Sur GitHub : bouton vert **"Code"** → **"Download ZIP"** → extraire le dossier.
 
-**Étape 2 — Installer les dépendances**
+**2️⃣ Installer les dépendances**
 ```bash
 pip install -r requirements.txt
 ```
 
-**Étape 3 — Configurer la clé API**
+**3️⃣ Configurer la clé API**
 
-Créez un fichier `.env` à la racine du dossier extrait et ajoutez :
+Créez un fichier `.env` à la racine du dossier extrait :
 ```env
 API_KEY=votre_clé_api_mistral_ici
 ```
 
-**Étape 4 — Lancer l'application**
+**4️⃣ Lancer l'application**
 ```bash
 python app.py
 ```
 
+</details>
+
 ---
 
-Ouvrez votre navigateur à l'adresse : **[http://127.0.0.1:5000](http://127.0.0.1:5000)** 🎉
----
+✅ Ouvrez votre navigateur à l'adresse : **[http://127.0.0.1:5000](http://127.0.0.1:5000)**
 
 ## 📁 Structure du projet
 
@@ -134,7 +142,6 @@ Ouvrez votre navigateur à l'adresse : **[http://127.0.0.1:5000](http://127.0.0.
 ├── 📄 requirements.txt                     ← Dépendances Python
 ├── 📄 licence.txt                          ← Licence GPL v3+
 ├── 📄 README.md                            ← Ce fichier
-├── 📄 .env                                 ← Variables d'environnement (⚠️ non versionné)
 │
 ├── 📁 fonctions/                           ← Modules Python (1 fichier = 1 fonction)
 │   ├── 📄 definir_listes.py               ← Génère les listes des filtres déroulants
@@ -143,7 +150,7 @@ Ouvrez votre navigateur à l'adresse : **[http://127.0.0.1:5000](http://127.0.0.
 │   ├── 📄 calculer_probabilites_admission.py ← Probabilités par type de bac
 │   ├── 📄 calculer_repartition_mentions.py   ← Répartition complète des mentions
 │   ├── 📄 construire_resultats.py         ← Agrège toutes les données pour l'affichage
-│   └── 📄 mettre_a_jour_listes.py        ← Mise à jour dynamique des listes (AJAX)
+│   └── 📄 mettre_a_jour_listes.py        ← Mise à jour dynamique des listes
 │
 ├── 📁 static/                              ← Ressources statiques
 │   ├── 📄 fr-esr-parcoursup.csv           ← Données officielles Parcoursup (data.gouv.fr)
@@ -255,13 +262,48 @@ pytest test/ --cov=sources
 
 <div align="center">
 
-| <img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" width="60"/> | <img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" width="60"/> | <img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" width="60"/> |
-|:---:|:---:|:---:|
-| **Amine** | **Jarod** | **Mouheb** |
-| Créateur & Développeur principal | Restructuration & Architecture | Tests unitaires & Qualité |
-| Back-end Flask, API Mistral, simulateur Parcoursup, design Tailwind | Refactorisation du code, organisation des modules, normes du concours | Fonctions de test, reproductibilité, documentation |
+<table>
+  <tr>
+    <td align="center" width="280">
+      <img src="static/amine.png" width="80" style="border-radius:50%"/><br><br>
+      <img src="https://img.shields.io/badge/Amine-Créateur-3b82f6?style=for-the-badge&logoColor=white"/>
+      <br><br>
+      <b>Développeur principal</b><br><br>
+      <img src="https://img.shields.io/badge/Flask-Back--end-000000?style=flat-square&logo=flask"/>
+      <img src="https://img.shields.io/badge/Mistral-IA-FF7000?style=flat-square"/>
+      <img src="https://img.shields.io/badge/Pandas-Données-150458?style=flat-square&logo=pandas"/>
+      <img src="https://img.shields.io/badge/Tailwind-Design-06B6D4?style=flat-square&logo=tailwindcss"/>
+      <br><br>
+      <i>Conception de l'architecture, développement full-stack, intégration API Mistral, simulateur Parcoursup</i>
+    </td>
+    <td align="center" width="280">
+      <img src="static/anas.png" width="80" style="border-radius:50%"/><br><br>
+      <img src="https://img.shields.io/badge/Jarod-Architecture-8b5cf6?style=for-the-badge&logoColor=white"/>
+      <br><br>
+      <b>Restructuration & Qualité</b><br><br>
+      <img src="https://img.shields.io/badge/Refactorisation-Code-8b5cf6?style=flat-square"/>
+      <img src="https://img.shields.io/badge/Modules-Organisation-6d28d9?style=flat-square"/>
+      <br><br>
+      <i>Refactorisation du code, organisation des modules, mise en conformité avec les normes du concours</i>
+    </td>
+    <td align="center" width="280">
+      <img src="static/gibaud.jpeg" width="80" style="border-radius:50%"/><br><br>
+      <img src="https://img.shields.io/badge/Mouheb-Tests-3b82f6?style=for-the-badge&logoColor=white"/>
+      <br><br>
+      <b>Tests & Documentation</b><br><br>
+      <img src="https://img.shields.io/badge/Pytest-Tests-0A9EDC?style=flat-square&logo=pytest"/>
+      <img src="https://img.shields.io/badge/Documentation-Qualité-22c55e?style=flat-square"/>
+      <br><br>
+      <i>Fonctions de test unitaires, vérification de la reproductibilité, documentation technique</i>
+    </td>
+  </tr>
+</table>
 
-*Terminale NSI — Lycée Isaac Newton, Clichy*
+<br>
+
+![Lycée Newton](https://img.shields.io/badge/Lycée_Isaac_Newton-Clichy-3b82f6?style=for-the-badge&logo=google-maps&logoColor=white)
+![Terminale NSI](https://img.shields.io/badge/Terminale-NSI-8b5cf6?style=for-the-badge&logoColor=white)
+![Trophées NSI](https://img.shields.io/badge/Trophées_NSI-2026-6d28d9?style=for-the-badge&logoColor=white)
 
 </div>
 
