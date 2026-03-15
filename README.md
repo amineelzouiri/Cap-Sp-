@@ -265,7 +265,7 @@ pytest test/ --cov=sources
 <table>
   <tr>
     <td align="center" width="280">
-      <img src="static/amine.png" width="80" style="border-radius:50%"/><br><br>
+      <img src="static/amine.jpg" width="80" style="border-radius:50%"/><br><br>
       <img src="https://img.shields.io/badge/Amine-Créateur-3b82f6?style=for-the-badge&logoColor=white"/>
       <br><br>
       <b>Développeur principal</b><br><br>
