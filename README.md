@@ -66,66 +66,63 @@ Cap Spé
 
 ## 🚀 Installation et lancement
 
-### Prérequis
-
-- **Python 3.10 ou supérieur** — [Télécharger Python](https://www.python.org/downloads/)
-- **Git** — [Télécharger Git](https://git-scm.com/)
-- Une **clé API Mistral AI** — [Obtenir une clé](https://console.mistral.ai/)
+> ⚠️ **Clé API Mistral non fournie** — Le chatbot nécessite une clé API Mistral pour fonctionner. Si vous souhaitez tester le chatbot sans installation, rendez-vous directement sur **[capspe.fr](https://capspe.fr)**
 
 ---
 
-### Étape 1 — Cloner le dépôt
+### Option A — Via Git
 
+**Étape 1 — Cloner le dépôt**
 ```bash
-git clone https://forge.apps.education.fr/[votre-repo]/cap-spe.git
-cd cap-spe
+git clone https://github.com/amineelzouiri/Cap-Sp-
+cd Cap-Sp-
 ```
 
-### Étape 2 — Créer un environnement virtuel
-
-```bash
-# Créer l'environnement
-python -m venv venv
-
-# Activer l'environnement
-# Sur Windows :
-venv\Scripts\activate
-# Sur macOS / Linux :
-source venv/bin/activate
-```
-
-### Étape 3 — Installer les dépendances
-
+**Étape 2 — Installer les dépendances**
 ```bash
 pip install -r requirements.txt
 ```
 
-### Étape 4 — Configurer les variables d'environnement
+**Étape 3 — Configurer la clé API**
 
-Créez un fichier `.env` à la racine du projet :
-
-```bash
-# Créer le fichier .env
-touch .env    # macOS / Linux
-# ou sur Windows : créez le fichier manuellement
-```
-
-Ajoutez votre clé API dans ce fichier `.env` :
-
+Créez un fichier `.env` à la racine du projet et ajoutez :
 ```env
-MISTRAL_API_KEY=votre_clé_api_mistral_ici
+API_KEY=votre_clé_api_mistral_ici
 ```
 
-> ⚠️ **Ne partagez jamais votre clé API.** Le fichier `.env` est volontairement exclu du dépôt Git (listé dans `.gitignore`).
-
-### Étape 5 — Lancer l'application
-
+**Étape 4 — Lancer l'application**
 ```bash
-python main.py
+python app.py
 ```
+
+---
+
+### Option B — Via ZIP
+
+**Étape 1 — Télécharger le projet**
+
+Sur GitHub : bouton vert **"Code"** → **"Download ZIP"**, puis extraire le dossier.
+
+**Étape 2 — Installer les dépendances**
+```bash
+pip install -r requirements.txt
+```
+
+**Étape 3 — Configurer la clé API**
+
+Créez un fichier `.env` à la racine du dossier extrait et ajoutez :
+```env
+API_KEY=votre_clé_api_mistral_ici
+```
+
+**Étape 4 — Lancer l'application**
+```bash
+python app.py
+```
+
+---
 
 Ouvrez votre navigateur à l'adresse : **[http://127.0.0.1:5000](http://127.0.0.1:5000)** 🎉
-
 ---
 
 ## 📁 Structure du projet
