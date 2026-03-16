@@ -66,7 +66,7 @@ Cap Spé
 
 ## 🚀 Installation et lancement
 
-> ⚠️ **Clé API non fournie** — Le chatbot nécessite une clé API Mistral pour fonctionner en local.
+> ⚠️ **Clé API non fournie** Le chatbot nécessite une clé API Mistral pour fonctionner en local.
 > Vous pouvez tester le chatbot directement en ligne sur **[capspe.fr](https://capspe.fr)** 🌐
 
 ---
