@@ -60,19 +60,19 @@ def histoire():
 
 @app.route("/compute", methods=["POST"])
 def compute():
-    keys = ["lieu", "choix_dep", "choix_ville", "choix_fil", "choix_postbac"]
-    data = {k: request.form.get(k) for k in keys}
-    data['dataframe'] = dataframe
-    result = construire_resultats(**data)
+    cles = ["lieu", "choix_dep", "choix_ville", "choix_fil", "choix_postbac", 'choix_etablissement']
+    parametres = {k: request.form.get(k) for k in cles}
+    parametres['dataframe'] = dataframe
+    result = construire_resultats(parametres)
     return jsonify(result)
 
 
 @app.route("/change_liste", methods=["POST"])
 def change_liste():
-    keys = ["lieu", "choix_dep", "choix_ville", "choix_fil"]
-    data = {k: request.form.get(k) for k in keys}
-    data['dataframe'] = dataframe
-    result = mettre_a_jour_listes(**data)
+    keys = ["lieu", "choix_dep", "choix_ville", "choix_fil", "choix_postbac", 'choix_etablissement']
+    parametres = {k: request.form.get(k) for k in keys}
+    parametres['dataframe'] = dataframe
+    result = mettre_a_jour_listes(parametres)
     return jsonify(result)
 
 

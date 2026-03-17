@@ -18,7 +18,7 @@ def test_filtrer_donnees():
         choix_fil=None,
         choix_postbac=None,
         choix_ville="Clichy",
-        df_filtered=dataframe,
+        dataframe=dataframe,
         lieu="Ile-de-France"
     )
 
@@ -30,5 +30,5 @@ def test_filtrer_donnees():
     assert (resultat_filtre["Filière de formation très agrégée"] == "BTS").all(), \
         "Certaines lignes ne correspondent pas à la filière BTS"
 
-    resultat_vide = filtrer_donnees(lieu="Mars", df_filtered=dataframe)
+    resultat_vide = filtrer_donnees(lieu="Mars", dataframe=dataframe)
     assert resultat_vide.empty, "Le filtre devrait être vide pour une région inexistante"

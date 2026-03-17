@@ -1,8 +1,7 @@
 #Projet : CapSpé
 #Auteurs : Amine, Jarod, Mouheb
 
-def filtrer_donnees(choix_dep=None, choix_etablissement=None, choix_fil=None, choix_postbac=None,
-                    choix_ville=None, lieu=None, df_filtered=None):
+def filtrer_donnees(param):
     """
     Applique successivement les filtres sélectionnés par l'utilisateur sur le DataFrame Parcoursup.
 
@@ -13,22 +12,23 @@ def filtrer_donnees(choix_dep=None, choix_etablissement=None, choix_fil=None, ch
         choix_postbac (str)       : filière détaillée post-bac
         choix_ville (str)         : commune ou agglomération
         lieu (str)                : région
-        df_filtered (DataFrame)   : DataFrame Parcoursup complet
+        dataframe (DataFrame)   : DataFrame Parcoursup complet
 
     Retourne :
         DataFrame : sous-ensemble filtré selon les critères fournis
     """
-    if lieu:
-        df_filtered = df_filtered[df_filtered["Région de l'établissement"] == lieu]
-    if choix_dep:
-        df_filtered = df_filtered[df_filtered["Filière de formation très agrégée"] == choix_dep]
-    if choix_ville:
-        df_filtered = df_filtered[
-            (df_filtered["Commune de l'établissement"] == choix_ville) | (df_filtered["Agglomération"] == choix_ville)]
-    if choix_fil:
-        df_filtered = df_filtered[df_filtered["Filière de formation"] == choix_fil]
-    if choix_postbac:
-        df_filtered = df_filtered[df_filtered["Filière de formation détaillée"] == choix_postbac]
-    if choix_etablissement:
-        df_filtered = df_filtered[df_filtered["Établissement"] == choix_etablissement]
-    return df_filtered
+    dataframe = param['dataframe']
+    if param['lieu']:
+        dataframe = dataframe[dataframe["Région de l’établissement"] == param['lieu']]
+    if param['choix_dep']:
+        dataframe = dataframe[dataframe["Filière de formation très agrégée"] == param['choix_dep']]
+    if param['choix_ville']:
+        dataframe = dataframe[
+            (dataframe["Commune de l’établissement"] == param['choix_ville']) | (dataframe["Agglomération"] == param['choix_ville'])]
+    if param['choix_fil']:
+        dataframe = dataframe[dataframe["Filière de formation"] == param['choix_fil']]
+    if param['choix_postbac']:
+        dataframe = dataframe[dataframe["Filière de formation détaillée"] == param['choix_postbac']]
+    if param['choix_etablissement']:
+        dataframe = dataframe[dataframe["Établissement"] == param['choix_etablissement']]
+    return dataframe

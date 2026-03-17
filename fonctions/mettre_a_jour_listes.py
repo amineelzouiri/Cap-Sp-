@@ -3,7 +3,7 @@
 
 from fonctions.filtrer_donnees import filtrer_donnees
 
-def mettre_a_jour_listes(lieu=None, choix_dep=None, choix_ville=None, choix_fil=None, dataframe=None):
+def mettre_a_jour_listes(param: dict):
     """
     Met à jour dynamiquement les listes déroulantes du simulateur en fonction
     des filtres déjà sélectionnés par l'utilisateur (requête AJAX).
@@ -18,11 +18,10 @@ def mettre_a_jour_listes(lieu=None, choix_dep=None, choix_ville=None, choix_fil=
     Retourne :
         dict : {'villes': list, 'filieres': list, 'postbacs': list}
     """
-    df = dataframe.copy()
-    df_temp_filtered = filtrer_donnees(
-        lieu=lieu, choix_dep=choix_dep, choix_ville=choix_ville, choix_fil=choix_fil, df_filtered=df)
 
-    villes = sorted(df_temp_filtered["Commune de l'établissement"].dropna().unique())
+    df_temp_filtered = filtrer_donnees(param)
+
+    villes = sorted(df_temp_filtered["Commune de l’établissement"].dropna().unique())
     filieres = sorted(df_temp_filtered["Filière de formation"].dropna().unique())
     postbacs = sorted(df_temp_filtered["Filière de formation détaillée"].dropna().unique())
 
