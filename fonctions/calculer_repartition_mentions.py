@@ -4,17 +4,6 @@
 from fonctions.calculer_mention import calculer_mention
 
 def calculer_repartition_mentions(df_filtered):
-    """
-    Calcule la répartition pondérée des mentions du baccalauréat
-    parmi les néo-bacheliers admis dans les formations filtrées.
-
-    Paramètre :
-        dataframe (DataFrame) : DataFrame filtré selon les critères de l'utilisateur
-
-    Retourne :
-        dict : {'tb': float, 'b': float, 'ab': float, 'none': float}
-               Retourne des zéros si le DataFrame est vide.
-    """
     if df_filtered.empty:
         return {"tb": 0, "b": 0, "ab": 0, "none": 0}
 
