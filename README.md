@@ -287,7 +287,7 @@ pytest test/ --cov=sources
       <i>Refactorisation du code, organisation des modules, mise en conformité avec les normes du concours</i>
     </td>
     <td align="center" width="280">
-      <img src="https://media.discordapp.net/attachments/764558949818040341/1482870376978710650/IMG_3462.jpg?ex=69b88628&is=69b734a8&hm=ac84908f766061cbb6c72465187a9cd350e8983549564482e5a80e387395d126&=&format=webp&width=725&height=940" width="80" style="border-radius:50%"/><br><br>
+      <img src="https://cdn.discordapp.com/attachments/1364671165196664976/1485932943242297404/IMG_3462.jpg?ex=69c3aa64&is=69c258e4&hm=72576c5910e49b1d6418cc75e074d101187dc5c1aaf7ed2c26857d4112cfc458&" width="80" style="border-radius:50%"/><br><br>
       <img src="https://img.shields.io/badge/Mouheb-Tests-3b82f6?style=for-the-badge&logoColor=white"/>
       <br><br>
       <b>Tests & Documentation</b><br><br>
