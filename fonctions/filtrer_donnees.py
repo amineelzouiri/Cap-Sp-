@@ -2,21 +2,6 @@
 #Auteurs : Amine, Jarod, Mouheb
 
 def filtrer_donnees(param):
-    """
-    Applique successivement les filtres sélectionnés par l'utilisateur sur le DataFrame Parcoursup.
-
-    Paramètres :
-        choix_dep (str)           : filière agrégée (ex: "BTS", "Licence")
-        choix_etablissement (str) : nom de l'établissement
-        choix_fil (str)           : filière de formation
-        choix_postbac (str)       : filière détaillée post-bac
-        choix_ville (str)         : commune ou agglomération
-        lieu (str)                : région
-        dataframe (DataFrame)   : DataFrame Parcoursup complet
-
-    Retourne :
-        DataFrame : sous-ensemble filtré selon les critères fournis
-    """
     dataframe = param['dataframe']
     if param['lieu']:
         dataframe = dataframe[dataframe["Région de l’établissement"] == param['lieu']]
