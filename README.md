@@ -72,7 +72,7 @@ Cap Spé
 ---
 
 <details>
-<summary>🔵 &nbsp;<b>Option A — Via Git</b></summary>
+<summary>🔵 &nbsp;<b>Option A - Via Git</b></summary>
 <br>
 
 **1️⃣ Cloner le dépôt**
@@ -103,7 +103,7 @@ python app.py
 ---
 
 <details>
-<summary>🟣 &nbsp;<b>Option B — Via ZIP</b></summary>
+<summary>🟣 &nbsp;<b>Option B - Via ZIP</b></summary>
 <br>
 
 **1️⃣ Télécharger le projet**
@@ -311,7 +311,7 @@ pytest test/ --cov=sources
 
 <div align="center">
 
-**Cap Spé** — Projet réalisé dans le cadre des *Trophées NSI 2026*
+**Cap Spé** - Projet réalisé dans le cadre des *Trophées NSI 2026*
 
 Lycée Isaac Newton · Clichy · Académie de Versailles
 
