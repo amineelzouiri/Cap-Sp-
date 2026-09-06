@@ -1,6 +1,7 @@
 <div align="center">
 
-<img src="https://media.discordapp.net/attachments/764558949818040341/1482761696799100939/logo_lycee.png?ex=69b820f0&is=69b6cf70&hm=a39642ea34c2870de80d869ad4c3286f2036fb67a17d3885f4f2355d55466617&=&format=webp&quality=lossless&width=350&height=370" width="120" alt="Cap Spé Logo"/>
+<img width="192" height="192" alt="logo" src="https://github.com/user-attachments/assets/ab33aee5-9d1a-445b-b587-9e7287523b8b" />
+
 
 # 🎓 Cap Spé
 
